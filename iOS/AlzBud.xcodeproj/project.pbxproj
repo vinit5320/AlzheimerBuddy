@@ -15,13 +15,17 @@
 		2B6D355C1E92D5F500DBC43D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B6D355A1E92D5F500DBC43D /* LaunchScreen.storyboard */; };
 		2B6D35671E92D5F600DBC43D /* AlzBudTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D35661E92D5F600DBC43D /* AlzBudTests.swift */; };
 		2B6D35721E92D5F600DBC43D /* AlzBudUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D35711E92D5F600DBC43D /* AlzBudUITests.swift */; };
-		2B6D35881E92D6DD00DBC43D /* LoginWithAmazon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D35871E92D6DD00DBC43D /* LoginWithAmazon.framework */; };
-		2B6D35891E92D6DD00DBC43D /* LoginWithAmazon.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D35871E92D6DD00DBC43D /* LoginWithAmazon.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2B6D358D1E92D7A600DBC43D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D358C1E92D7A600DBC43D /* Foundation.framework */; };
 		2B6D358F1E92D7AA00DBC43D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D358E1E92D7AA00DBC43D /* UIKit.framework */; };
 		2B6D35911E92D7B400DBC43D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D35901E92D7B400DBC43D /* CoreGraphics.framework */; };
 		2B6D35931E92D7B900DBC43D /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D35921E92D7B900DBC43D /* SafariServices.framework */; };
 		2B6D35951E92D7BE00DBC43D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D35941E92D7BE00DBC43D /* Security.framework */; };
+		2B6D35A01E92FFAC00DBC43D /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D359F1E92FFAC00DBC43D /* Alamofire.framework */; };
+		2B6D35A11E92FFAC00DBC43D /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B6D359F1E92FFAC00DBC43D /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2B6D35A51E92FFD400DBC43D /* ReadAudio+ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D35A21E92FFD400DBC43D /* ReadAudio+ViewController.swift */; };
+		2B6D35A61E92FFD400DBC43D /* API+ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D35A31E92FFD400DBC43D /* API+ViewController.swift */; };
+		2B6D35A71E92FFD400DBC43D /* UI+ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6D35A41E92FFD400DBC43D /* UI+ViewController.swift */; };
+		EE8961F30A3D3FBC6962DBFC /* Pods_AlzBud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F500BC0E9BD3689D56FE73E /* Pods_AlzBud.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,7 +52,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2B6D35891E92D6DD00DBC43D /* LoginWithAmazon.framework in Embed Frameworks */,
+				2B6D35A11E92FFAC00DBC43D /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 1;
@@ -56,6 +60,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A5C0C0A8E1111243B9DD85D /* Pods-AlzBud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlzBud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AlzBud/Pods-AlzBud.debug.xcconfig"; sourceTree = "<group>"; };
+		0F500BC0E9BD3689D56FE73E /* Pods_AlzBud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AlzBud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B6D354B1E92D5F500DBC43D /* AlzBud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlzBud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B6D354E1E92D5F500DBC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2B6D35501E92D5F500DBC43D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -71,13 +77,17 @@
 		2B6D35711E92D5F600DBC43D /* AlzBudUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlzBudUITests.swift; sourceTree = "<group>"; };
 		2B6D35731E92D5F600DBC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B6D35811E92D63800DBC43D /* AlzBud-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AlzBud-Bridging-Header.h"; sourceTree = "<group>"; };
-		2B6D35871E92D6DD00DBC43D /* LoginWithAmazon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LoginWithAmazon.framework; sourceTree = "<group>"; };
 		2B6D358C1E92D7A600DBC43D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		2B6D358E1E92D7AA00DBC43D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2B6D35901E92D7B400DBC43D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		2B6D35921E92D7B900DBC43D /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		2B6D35941E92D7BE00DBC43D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		2B6D35961E92E8A000DBC43D /* AlzBud.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlzBud.entitlements; sourceTree = "<group>"; };
+		2B6D359F1E92FFAC00DBC43D /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B6D35A21E92FFD400DBC43D /* ReadAudio+ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ReadAudio+ViewController.swift"; sourceTree = "<group>"; };
+		2B6D35A31E92FFD400DBC43D /* API+ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "API+ViewController.swift"; sourceTree = "<group>"; };
+		2B6D35A41E92FFD400DBC43D /* UI+ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UI+ViewController.swift"; sourceTree = "<group>"; };
+		AE9A8921B8631E61ABC86C0D /* Pods-AlzBud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AlzBud.release.xcconfig"; path = "Pods/Target Support Files/Pods-AlzBud/Pods-AlzBud.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +100,8 @@
 				2B6D35911E92D7B400DBC43D /* CoreGraphics.framework in Frameworks */,
 				2B6D358F1E92D7AA00DBC43D /* UIKit.framework in Frameworks */,
 				2B6D358D1E92D7A600DBC43D /* Foundation.framework in Frameworks */,
-				2B6D35881E92D6DD00DBC43D /* LoginWithAmazon.framework in Frameworks */,
+				EE8961F30A3D3FBC6962DBFC /* Pods_AlzBud.framework in Frameworks */,
+				2B6D35A01E92FFAC00DBC43D /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,11 +125,13 @@
 		2B6D35421E92D5F500DBC43D = {
 			isa = PBXGroup;
 			children = (
+				2B6D359F1E92FFAC00DBC43D /* Alamofire.framework */,
 				2B6D354D1E92D5F500DBC43D /* AlzBud */,
 				2B6D35651E92D5F600DBC43D /* AlzBudTests */,
 				2B6D35701E92D5F600DBC43D /* AlzBudUITests */,
 				2B6D354C1E92D5F500DBC43D /* Products */,
 				2B6D358B1E92D7A600DBC43D /* Frameworks */,
+				D718E2F93E0B8E79B07B2A0C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,12 +151,14 @@
 				2B6D35961E92E8A000DBC43D /* AlzBud.entitlements */,
 				2B6D354E1E92D5F500DBC43D /* AppDelegate.swift */,
 				2B6D35501E92D5F500DBC43D /* ViewController.swift */,
+				2B6D35A21E92FFD400DBC43D /* ReadAudio+ViewController.swift */,
+				2B6D35A31E92FFD400DBC43D /* API+ViewController.swift */,
+				2B6D35A41E92FFD400DBC43D /* UI+ViewController.swift */,
 				2B6D35521E92D5F500DBC43D /* Main.storyboard */,
 				2B6D35581E92D5F500DBC43D /* Assets.xcassets */,
 				2B6D355A1E92D5F500DBC43D /* LaunchScreen.storyboard */,
 				2B6D355D1E92D5F500DBC43D /* Info.plist */,
 				2B6D35551E92D5F500DBC43D /* AlzBud.xcdatamodeld */,
-				2B6D35871E92D6DD00DBC43D /* LoginWithAmazon.framework */,
 				2B6D35811E92D63800DBC43D /* AlzBud-Bridging-Header.h */,
 			);
 			path = AlzBud;
@@ -175,8 +190,18 @@
 				2B6D35901E92D7B400DBC43D /* CoreGraphics.framework */,
 				2B6D358E1E92D7AA00DBC43D /* UIKit.framework */,
 				2B6D358C1E92D7A600DBC43D /* Foundation.framework */,
+				0F500BC0E9BD3689D56FE73E /* Pods_AlzBud.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D718E2F93E0B8E79B07B2A0C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0A5C0C0A8E1111243B9DD85D /* Pods-AlzBud.debug.xcconfig */,
+				AE9A8921B8631E61ABC86C0D /* Pods-AlzBud.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,10 +211,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2B6D35761E92D5F600DBC43D /* Build configuration list for PBXNativeTarget "AlzBud" */;
 			buildPhases = (
+				7EE679D574CC901826F081A8 /* [CP] Check Pods Manifest.lock */,
 				2B6D35471E92D5F500DBC43D /* Sources */,
 				2B6D35481E92D5F500DBC43D /* Frameworks */,
 				2B6D35491E92D5F500DBC43D /* Resources */,
 				2B6D358A1E92D6DD00DBC43D /* Embed Frameworks */,
+				166F278D2621DB59D97F652B /* [CP] Embed Pods Frameworks */,
+				1D001E3A4FC96DA4E6B27D94 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -315,13 +343,64 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		166F278D2621DB59D97F652B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AlzBud/Pods-AlzBud-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1D001E3A4FC96DA4E6B27D94 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AlzBud/Pods-AlzBud-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7EE679D574CC901826F081A8 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2B6D35471E92D5F500DBC43D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				2B6D35511E92D5F500DBC43D /* ViewController.swift in Sources */,
+				2B6D35A61E92FFD400DBC43D /* API+ViewController.swift in Sources */,
+				2B6D35A51E92FFD400DBC43D /* ReadAudio+ViewController.swift in Sources */,
 				2B6D35571E92D5F500DBC43D /* AlzBud.xcdatamodeld in Sources */,
+				2B6D35A71E92FFD400DBC43D /* UI+ViewController.swift in Sources */,
 				2B6D354F1E92D5F500DBC43D /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -474,6 +553,7 @@
 		};
 		2B6D35771E92D5F600DBC43D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0A5C0C0A8E1111243B9DD85D /* Pods-AlzBud.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AlzBud/AlzBud.entitlements;
@@ -484,6 +564,7 @@
 					"$(PROJECT_DIR)/AlzBud/LoginWithAmazon.framework",
 				);
 				INFOPLIST_FILE = AlzBud/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ViNiT.AlzBuddy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -494,6 +575,7 @@
 		};
 		2B6D35781E92D5F600DBC43D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE9A8921B8631E61ABC86C0D /* Pods-AlzBud.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = AlzBud/AlzBud.entitlements;
@@ -504,6 +586,7 @@
 					"$(PROJECT_DIR)/AlzBud/LoginWithAmazon.framework",
 				);
 				INFOPLIST_FILE = AlzBud/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ViNiT.AlzBuddy;
 				PRODUCT_NAME = "$(TARGET_NAME)";

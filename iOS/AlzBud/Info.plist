@@ -59,5 +59,9 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>blabla</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>blabla</string>
 </dict>
 </plist>

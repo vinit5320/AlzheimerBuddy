@@ -9,6 +9,4 @@
 #ifndef AlzBud_Bridging_Header_h
 #define AlzBud_Bridging_Header_h
 
-#import <LoginWithAmazon/LoginWithAmazon.h>
-
 #endif /* AlzBud_Bridging_Header_h */
