@@ -1,0 +1,21 @@
+{
+   "name": "finding-object-context",
+   "auto": true,
+   "contexts": [],
+   "templates": [],
+   "userSays": [
+      {
+         "data":[
+            {
+               "text": "$things:laptop",
+               "alias": "laptop",
+               "meta": "@things"
+            }
+         ],
+         "isTemplate": false,
+         "count": 0
+      }
+   ],
+   "responses": [],
+   "priority": 500000
+}

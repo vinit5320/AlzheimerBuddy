@@ -38,6 +38,9 @@
                                     <constraint firstAttribute="width" constant="164" id="hG8-rF-BcH"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="searchPress:" destination="hXJ-qG-gHU" eventType="touchUpInside" id="jse-Ol-v6n"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qje-jf-xPh">
                                 <rect key="frame" x="16" y="129" width="343" height="376"/>
@@ -45,21 +48,35 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IG9-C4-22I">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="66" id="bCu-Zt-9BP"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Qje-jf-xPh" secondAttribute="trailing" constant="16" id="1lD-Jy-ejj"/>
                             <constraint firstItem="Qje-jf-xPh" firstAttribute="top" secondItem="eMq-Ec-iiO" secondAttribute="bottom" constant="25" id="4ZS-LQ-5qX"/>
                             <constraint firstItem="eMq-Ec-iiO" firstAttribute="leading" secondItem="ZVd-Qd-cC6" secondAttribute="leading" constant="16" id="DcV-2J-MA4"/>
+                            <constraint firstItem="IG9-C4-22I" firstAttribute="leading" secondItem="ZVd-Qd-cC6" secondAttribute="leading" id="EXJ-ku-kmE"/>
                             <constraint firstItem="jWv-jF-gOO" firstAttribute="top" secondItem="Qje-jf-xPh" secondAttribute="bottom" constant="8" id="KMA-3N-Bgo"/>
                             <constraint firstItem="Qje-jf-xPh" firstAttribute="leading" secondItem="ZVd-Qd-cC6" secondAttribute="leading" constant="16" id="XNu-Uh-8sN"/>
                             <constraint firstItem="jWv-jF-gOO" firstAttribute="centerX" secondItem="ZVd-Qd-cC6" secondAttribute="centerX" id="YNq-pb-aIA"/>
                             <constraint firstAttribute="trailing" secondItem="eMq-Ec-iiO" secondAttribute="trailing" constant="16" id="Z7W-7a-tLu"/>
                             <constraint firstItem="eMq-Ec-iiO" firstAttribute="top" secondItem="TSq-rr-X1i" secondAttribute="bottom" constant="54" id="bp4-s7-Wa3"/>
+                            <constraint firstItem="IG9-C4-22I" firstAttribute="top" secondItem="ZVd-Qd-cC6" secondAttribute="top" id="cjR-3K-rXD"/>
                             <constraint firstItem="kWz-3T-GJh" firstAttribute="top" secondItem="jWv-jF-gOO" secondAttribute="bottom" constant="40" id="cy2-Sl-Lci"/>
+                            <constraint firstAttribute="trailing" secondItem="IG9-C4-22I" secondAttribute="trailing" id="gDD-qL-YNf"/>
                             <constraint firstItem="eMq-Ec-iiO" firstAttribute="centerX" secondItem="ZVd-Qd-cC6" secondAttribute="centerX" id="l0h-eg-THW"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="myImageView" destination="IG9-C4-22I" id="Uv0-mf-SJ8"/>
+                        <outlet property="outputLabel" destination="Qje-jf-xPh" id="q2n-Da-qoq"/>
+                        <outlet property="userInputField" destination="eMq-Ec-iiO" id="Z3w-bg-jZ1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Gg-EU-Hgl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
