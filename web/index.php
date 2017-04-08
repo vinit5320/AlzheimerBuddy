@@ -94,7 +94,7 @@ if(isset($_POST['btn_login']))
 	{
 
 		$_SESSION['userSession'] = $uname; 
-		header("Location: objects.php");
+		header("Location: main_page.php");
 	}
 	else
 	{

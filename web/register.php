@@ -96,7 +96,7 @@ if(isset($_POST['btn_sign_up']))
 		$qry = "insert into users (uname, upass) values ('$uname', '$password')";
 		$result = $conn->query($qry);
 		$_SESSION['userSession'] = $uname;
-		header("Location: dashboard.php");
+		header("Location: main_page.php");
 	}
 	else
 	{
@@ -104,15 +104,10 @@ if(isset($_POST['btn_sign_up']))
 	}
 }
 
-if(isset($_POST['btn_register']))                                 
-{
-	header("Location: register.php");
-}
-
 ?>
 <div class = "container">
 	<div class="wrapper">
-		<form method="post" name="Login_Form" class="form-signin">       
+		<form method="post" name="Login_Form" class="form-signin" >       
 			<h3 class="form-signin-heading">Welcome to Alzheimer Buddy! Please register.</h3>
 			<hr class="colorgraph"><br>
 
