@@ -14,6 +14,13 @@ if(!isset($_SESSION['userSession']))
 
 $user_name = $_SESSION['userSession'];
 
+if(isset($_POST['btn_logout']))
+{
+  session_destroy();
+
+  $URL="index.php";
+  echo "<script type='text/javascript'>document.location.href='{$URL}';</script>";
+}
 ?>
 
 <nav class="navbar navbar-default sidebar" role="navigation">
@@ -28,11 +35,14 @@ $user_name = $_SESSION['userSession'];
     </div>
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
       <ul class="nav navbar-nav">          
-        <li ><a href="main_page.php">Dashboard<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>        
+        <li ><a href="home.php">Dashboard<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-th-list"></span></a></li>        
         <li ><a href="schedule.php">Schedule<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span></a></li>
         <li ><a href="family.php">Family<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span></a></li>
         <li ><a href="objects.php">Objects<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-tags"></span></a></li>
       </ul>
     </div>
   </div>
+  <form method = "post">
+    <button type="submit" class="btn btn-primary" name="btn_logout" style="position: absolute; left: 32%; bottom: 2%;">Log out</button>
+  </form>
 </nav>

@@ -96,7 +96,7 @@ if(isset($_POST['btn_sign_up']))
 		$qry = "insert into users (uname, upass) values ('$uname', '$password')";
 		$result = $conn->query($qry);
 		$_SESSION['userSession'] = $uname;
-		header("Location: main_page.php");
+		header("Location: home.php");
 	}
 	else
 	{

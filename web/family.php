@@ -48,16 +48,17 @@ ini_set('default_socket_timeout', 300);
   
   if(isset($_POST['btn_add']))                                 
   {
-    $obname = $_POST['object_name'];
-    $obloc = $_POST['object_location'];
+    $fname = $_POST['name'];
+    $frelation = $_POST['relation'];
+    $fdesc = $_POST['desc'];
 
-    if($obname == "" || $obloc == "")
+    if($fname == "" || $frelation == "" || $fdesc == "")
     {
-      echo "<script type='text/javascript'>alert('Please enter both values in the field.');</script>";
+      echo "<script type='text/javascript'>alert('Please enter all values in the field.');</script>";
     }
     else
     {
-      $query2 = "insert into objects values ('$user_id', '$obname', '$obloc')";
+      $query2 = "insert into family values ('$user_id', '$fname', '$frelation', '$fdesc')";
       $result = $conn->query($query2);
     }
   }
@@ -66,13 +67,14 @@ ini_set('default_socket_timeout', 300);
 </head>
 
 <body>
-  <?php echo '<center><p class="lead" style="padding-top: 15px;">Objects</p></center><hr width="80%">';?>
+  <?php echo '<center><p class="lead" style="padding-top: 15px;">Family</p></center><hr width="80%">';?>
   <br>
 
   <div>
-    <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 33%; padding-bottom: 4%;">
-      <input type="text" class="form-control" placeholder="Object Name" name="object_name">
-      <input type="text" class="form-control" placeholder="Location" name="object_location">
+    <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 27%; padding-bottom: 4%;">
+      <input type="text" class="form-control" placeholder="Name" name="name">
+      <input type="text" class="form-control" placeholder="Relationship" name="relation">
+      <input type="text" class="form-control" placeholder="Description" name="desc">
       <button type="submit" class="btn btn-primary" name="btn_add">Add</button>
     </form>
   </div>
@@ -82,13 +84,14 @@ ini_set('default_socket_timeout', 300);
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Object Name</th>
-                    <th>Object Location</th>
+                    <th>Name</th>
+                    <th>Relationship</th>
+                    <th>Description</th>
                   </tr>
                 </thead>
                 <tbody>';
 
-                $query3 = "select * from objects where userid = '$user_id'";
+                $query3 = "select * from family where uid = '$user_id'";
                 $result = $conn->query($query3);
 
                 while($row_ob = mysqli_fetch_array($result))
@@ -96,6 +99,7 @@ ini_set('default_socket_timeout', 300);
                   echo '<tr>
                     <td>'.$row_ob[1].'</td>
                     <td>'.$row_ob[2].'</td>
+                    <td>'.$row_ob[3].'</td>
                   </tr>';
                 }
 
@@ -103,6 +107,5 @@ ini_set('default_socket_timeout', 300);
               </table>
             </div>';
 ?>
-
 </body>
 </html>
