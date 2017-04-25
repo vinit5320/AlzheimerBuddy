@@ -1,0 +1,12 @@
+FindThings	can you find something
+FindThings	can you help me find something
+FindThings	did you see my {thingsslot}
+FindThings	do you see my {thingsslot}
+FindThings	find me a thing
+FindThings	find my {thingsslot}
+FindThings	help me finding something
+FindThings	where are my {thingsslot}
+FindThings	where is my {thingsslot}
+FindThings	where is the {thingsslot} keep
+FindThings	where is the {thingsslot} kept
+FindingObjectContext	{thingsslot}

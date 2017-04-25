@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+      "intent": "FindThings",
+      "slots": [
+        {
+          "name": "thingsslot",
+          "type": "THINGS"
+        }
+      ]
+    },
+    {
+      "intent": "FindingObjectContext",
+      "slots": [
+        {
+          "name": "thingsslot",
+          "type": "THINGS"
+        }
+      ]
+    }
+  ]
+}
