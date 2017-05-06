@@ -1,0 +1,63 @@
+//CUSTOM SLOTS: Enter these custom slots below Intent Schema. For Eg. THINGS is Custom slot type and keys,pen,book,etc are the vales
+
+THINGS
+
+keys
+pen
+book
+phone
+microphone
+laptop
+key
+pencil
+dictionary
+thesauraus
+mobile
+wallet
+
+
+
+LOCATION
+
+in my cupboard
+on the shelf
+on the table
+in my pocket
+in my bag
+on the chair
+in the fridge
+in your car
+in the box
+on the floor
+
+
+
+BOOL
+
+yes
+no
+
+
+
+MEMORY
+
+memory
+flashback
+retrospection
+recollect
+recall
+remind
+something
+
+
+
+NAME
+
+Steve
+John
+Alex
+Vinit
+Peter
+Susan
+Emma
+Cristine

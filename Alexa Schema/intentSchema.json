@@ -1,0 +1,62 @@
+{
+  "intents": [
+    {
+      "slots": [
+        {
+          "name": "thingsslot",
+          "type": "THINGS"
+        }
+      ],
+      "intent": "FindingObjectContext"
+    },
+    {
+      "slots": [
+        {
+          "name": "thingsslot",
+          "type": "THINGS"
+        }
+      ],
+      "intent": "FindThings"
+    },
+    {
+      "slots": [
+        {
+          "name": "thingsslot",
+          "type": "THINGS"
+        }
+      ],
+      "intent": "SaveThingsContext"
+    },
+    {
+      "slots": [
+        {
+          "name": "thingsLocation",
+          "type": "LOCATION"
+        }
+      ],
+      "intent": "SaveThingsLocation"
+    },
+    {
+      "slots": [
+        {
+          "name": "yesNoBool",
+          "type": "BOOL"
+        }
+      ],
+      "intent": "DecisionBool"
+    },
+    {
+      "slots": [
+        {
+          "name": "memoryText",
+          "type": "MEMORY"
+        },
+        {
+          "name": "personName",
+          "type": "NAME"
+        }
+      ],
+      "intent": "OthersMemory"
+    }
+  ]
+}

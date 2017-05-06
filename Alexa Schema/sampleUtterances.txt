@@ -1,0 +1,45 @@
+FindingObjectContext can you find something
+FindingObjectContext can you help me find something
+FindingObjectContext help me in finding something
+FindingObjectContext help me find something
+FindingObjectContext search for my
+FindingObjectContext search
+FindingObjectContext help in searching
+FindingObjectContext find my
+FindingObjectContext find me
+FindThings find my {thingsslot}
+FindThings search for my {thingsslot}
+FindThings where are my {thingsslot}
+FindThings did you see my {thingsslot}
+FindThings do you see my {thingsslot}
+FindThings where is my {thingsslot}
+FindThings where did i keep my {thingsslot}
+FindThings find my {thingsslot} and {thingsslot}
+FindThings where is the {thingsslot} kept
+FindThings help me in searching {thingsslot}
+FindThings help me in finding {thingsslot}
+FindThings my {thingsslot}
+FindThings my {thingsslot} please
+FindThings {thingsslot}
+SaveThingsContext I have kept my {thingsslot} here
+SaveThingsContext Save my {thingsslot} location
+SaveThingsContext remind me of my {thingsslot}
+SaveThingsContext I'm leaving my {thingsslot} here
+SaveThingsContext Im leaving my {thingsslot}
+SaveThingsContext left my {thingsslot}
+SaveThingsContext save the location of my {thingsslot}
+SaveThingsContext kept my {thingsslot}
+SaveThingsContext keeping my {thingsslot}
+SaveThingsLocation {thingsLocation}
+DecisionBool {yesNoBool}
+OthersMemory give me a {memoryText}
+OthersMemory tell me a {memoryText}
+OthersMemory a {memoryText} about me
+OthersMemory {memoryText} on me
+OthersMemory tell me {memoryText}
+OthersMemory {memoryText}
+OthersMemory tell me a {memoryText} about {personName}
+OthersMemory {memoryText} on {personName}
+OthersMemory {personName} {memoryText}
+OthersMemory give me something on {personName}
+OthersMemory tell me somthing about {personName}
