@@ -29,7 +29,12 @@ SaveThingsContext Im leaving my {thingsslot}
 SaveThingsContext left my {thingsslot}
 SaveThingsContext save the location of my {thingsslot}
 SaveThingsContext kept my {thingsslot}
+SaveThingsContext moving my {thingsslot}
+SaveThingsContext replacing my {thingsslot}
+SaveThingsContext update the location of {thingsslot}
+SaveThingsContext change the location of {thingsslot}
 SaveThingsContext keeping my {thingsslot}
+SaveThingsLocation {yesNoBool} {thingsLocation}
 SaveThingsLocation {thingsLocation}
 DecisionBool {yesNoBool}
 OthersMemory give me a {memoryText}
@@ -41,5 +46,14 @@ OthersMemory {memoryText}
 OthersMemory tell me a {memoryText} about {personName}
 OthersMemory {memoryText} on {personName}
 OthersMemory {personName} {memoryText}
+OthersMemory to give me {personName} {memoryText}
 OthersMemory give me something on {personName}
 OthersMemory tell me somthing about {personName}
+FamilySearch who is {personName}
+FamilySearch {personName}
+FamilySearch who is {personName} to me
+FamilySearch what is the relation of {personName}
+FamilySearch Do I know {personName}
+FamilySearch who is my {personRelation}
+FamilySearch what is my {personRelation} name
+FamilySearch what is the name of my {personRelation}

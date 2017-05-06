@@ -43,7 +43,7 @@ newSessionHelper = (event,context) => {
                 case "FindThings":
                     var itemName = event.request.intent.slots.thingsslot.value;
                     var query = "SELECT location from things where name = '" + itemName + "'";
-                    getDBResponse(query, itemName, context, "select", ""+event.request.intent.name);
+                    putDBResponse(query, itemName, context, "select", ""+event.request.intent.name);
                     break;
 
                 case "FindingObjectContext":
@@ -53,8 +53,8 @@ newSessionHelper = (event,context) => {
                     break;
 
                 case "SaveThingsContext":
-                    var itemName = event.request.intent.slots.thingsLocation.value;
-                    respondBack('Where are you exactly keeping your ' + itemName, false, {
+                    var itemName = event.request.intent.slots.thingsslot.value;
+                    respondBack('Where exactly are you keeping your ' + itemName, false, {
                         "itemName": itemName,
                         "context": "SaveThingsContext"
                     }, context);
@@ -65,12 +65,37 @@ newSessionHelper = (event,context) => {
                     if(event.request.intent.slots.personName.hasOwnProperty('value')){
                         userName = ""+event.request.intent.slots.personName.value;
                     }
-                    var query = "SELECT memory from memories where person = '" + userName + "'";
-                    getDBResponse(query, userName, context, "select", ""+event.request.intent.name);
+                    userName = (userName === "me") ? "vinit" : userName;
+                    var query = (userName === "random") ? "SELECT memory FROM memories ORDER BY RAND() LIMIT 1" :
+                        "SELECT memory from memories where person = '" + userName + "'";
+                    putDBResponse(query, userName, context, "select", ""+event.request.intent.name);
                     break;
 
+                case "FamilySearch":
+                    if(event.request.intent.slots.personName.hasOwnProperty('value')){
+                        var personName = ""+event.request.intent.slots.personName.value;
+                        var query = "SELECT * from family where name = '" + personName + "'";
+
+                        getDBResponse(query, function(err, response) {
+                            if(response !== null)
+                            respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
+                            else errorResponse(context);
+                        });
+                        break;
+
+                    } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
+                        var personRelation = ""+event.request.intent.slots.personRelation.value;
+                        var query = "SELECT location from things where name = '" + itemName + "'";
+                        getDBResponse(query, function(err, response) {
+                            if(response !== null)
+                                respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
+                            else errorResponse(context);
+                        });
+                        break;
+                    }
+
                 default:
-                    respondBack("Sorry I cannot handle your request right now.", true,{},context);
+                    errorResponse(context);
                     break;
 
             }
@@ -107,19 +132,33 @@ oldSessionHelper = (event,context) => {
 
         case currentContext === "FindingObjectContext":
             query = "SELECT location FROM things WHERE name = '" + itemName + "'";
-            getDBResponse(query, itemName, context, "select",currentContext);
+            putDBResponse(query, itemName, context, "select",currentContext);
             break;
 
         case currentContext === "SaveThingsLocation" && prevContext === "SaveThingsContext":
             params = params.replace(/my/g, 'your');
             params = params.replace(/mine/g, 'yours');
-            query = "INSERT INTO things (name, location) VALUES ( '"+itemName+"', '"+params+"')";
-            getDBResponse(query, itemName, context,"insert", currentContext);
-            break;
+
+            if(event.request.intent.slots.yesNoBool.hasOwnProperty('value') &&
+                (event.request.intent.slots.yesNoBool.value === "no")) {}
+            else {
+
+                getDBResponse("SELECT * FROM things WHERE name = '"+itemName+"'", function(err, response) {
+                    if(response !== null){
+                        query = "UPDATE things SET location= '"+params+"' WHERE name = '"+itemName+"'";
+                        putDBResponse(query, itemName, context,"insert", currentContext);
+                    }
+                    else {
+                        query = "INSERT INTO things (name, location) VALUES ( '"+itemName+"', '"+params+"')";
+                        putDBResponse(query, itemName, context,"insert", currentContext);
+                    }
+                });
+                break;
+            }
 
         case currentContext === "DecisionBool" && prevContext === "SaveThingsContext":
             if(params === "yes") {
-                respondBack('Where are you exactly keeping your ' + itemName, false, {
+                respondBack('Where exactly are you keeping your ' + itemName, false, {
                     "itemName": itemName,
                     "context": "SaveThingsContext"
                 }, context);
@@ -129,7 +168,7 @@ oldSessionHelper = (event,context) => {
             break;
 
         default:
-            respondBack("Sorry I cannot handle your request right now.", true,{},context);
+            errorResponse(context);
             break;
 
     }
@@ -145,8 +184,12 @@ respondBack = (response, endSession, attributes, context) => {
     )
 }
 
+errorResponse = (context) => {
+    respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
+}
+
 //DB Connection
-getDBResponse = (query, itemName, context, type, intentContext) => {
+putDBResponse = (query, itemName, context, type, intentContext) => {
 
     if(type === "insert") {
         connection.query(query, function(err, rows) {
@@ -154,7 +197,7 @@ getDBResponse = (query, itemName, context, type, intentContext) => {
             if(intentContext && intentContext === "SaveThingsLocation") {
                 respondBack("Okay I will remember that location permanently", true, {}, context);
             } else {
-                respondBack("Sorry I cannot handle your request right now.", true, {}, context);
+                respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
             }
         });
 
@@ -183,11 +226,40 @@ getDBResponse = (query, itemName, context, type, intentContext) => {
                 }
 
             } else {
-                respondBack("Sorry I cannot handle your request right now.", true, {}, context);
+                respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
             }
         });
     }
 }
+
+// getDBResponse = (query) => {
+//
+//     connection.query(query, function (err, rows) {
+//         if (err) throw err;
+//             if (rows[0] !== undefined) {
+//                 console.log("DATA AYAAA");
+//                 console.log(rows);
+//                 return rows[0];
+//             } else {
+//                 return '';
+//             }
+//     });
+//
+// }
+
+
+function getDBResponse(query, callback) {
+
+    connection.query(query, function (err, rows) {
+        if (err) throw err;
+        if (rows[0] !== undefined) {
+            callback(null, rows[0]);
+        } else {
+            callback(null, null);
+        }
+    });
+}
+
 
 
 // Speechlet Helpers

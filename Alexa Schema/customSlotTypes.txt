@@ -61,3 +61,25 @@ Peter
 Susan
 Emma
 Cristine
+random
+me
+
+
+
+RELATIONSHIP
+
+father
+mother
+uncle
+aunt
+brother
+sister
+grand mother
+grand father
+cousin brother
+cousin
+friend
+teacher
+co worker
+tutor
+colleague
