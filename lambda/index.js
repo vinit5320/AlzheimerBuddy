@@ -75,24 +75,39 @@ newSessionHelper = (event,context) => {
                     if(event.request.intent.slots.personName.hasOwnProperty('value')){
                         var personName = ""+event.request.intent.slots.personName.value;
                         var query = "SELECT * from family where name = '" + personName + "'";
-
+                        
                         getDBResponse(query, function(err, response) {
                             if(response !== null)
-                            respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
-                            else errorResponse(context);
+                            respondBack(response[0].name+' is your '+response[0].relationship+' who '+response[0].description, true, {}, context);
+                            else
+                            {
+                                respondBack("Sorry, no such person found.", true, {}, context);
+                            }
                         });
+                        
                         break;
 
                     } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
-                        var query = "SELECT location from things where name = '" + itemName + "'";
+                        var query = "SELECT * from family where relationship = '" + personRelation + "'";
                         getDBResponse(query, function(err, response) {
-                            if(response !== null)
-                                respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
-                            else errorResponse(context);
+                            if(response !== null){
+                                var res = "You have "+response.length+" "+personRelation+".";
+                                
+                                for(i in response)
+                                {
+                                   res += ' '+response[i].name+' is your '+response[i].relationship+' who '+response[i].description+' .';        
+                                }
+                                
+                                respondBack(res, true, {}, context);
+                            }
+                            else 
+                            {
+                                respondBack("Sorry, no such relation found.", true, {}, context);
+                            }
                         });
-                        break;
                     }
+                    break;
 
                 default:
                     errorResponse(context);
@@ -118,7 +133,7 @@ oldSessionHelper = (event,context) => {
     prevContext = event.session.attributes.context;
     currentContext = event.request.intent.name;
 
-    if(currentContext === "FindingObjectContext"){
+    if(currentContext === "FindThings"){
         itemName = event.request.intent.slots.thingsslot.value;
     } else if(currentContext === "SaveThingsLocation") {
         itemName = event.session.attributes.itemName;
@@ -130,7 +145,7 @@ oldSessionHelper = (event,context) => {
 
     switch(true) {
 
-        case currentContext === "FindingObjectContext":
+        case currentContext === "FindThings":
             query = "SELECT location FROM things WHERE name = '" + itemName + "'";
             putDBResponse(query, itemName, context, "select",currentContext);
             break;
@@ -153,8 +168,8 @@ oldSessionHelper = (event,context) => {
                         putDBResponse(query, itemName, context,"insert", currentContext);
                     }
                 });
-                break;
             }
+             break;
 
         case currentContext === "DecisionBool" && prevContext === "SaveThingsContext":
             if(params === "yes") {
@@ -195,8 +210,10 @@ putDBResponse = (query, itemName, context, type, intentContext) => {
         connection.query(query, function(err, rows) {
             if (err) throw err;
             if(intentContext && intentContext === "SaveThingsLocation") {
-                respondBack("Okay I will remember that location permanently", true, {}, context);
+                connection.end();
+                respondBack("Okay I will remember that location.", true, {}, context);
             } else {
+                connection.end();
                 respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
             }
         });
@@ -208,9 +225,12 @@ putDBResponse = (query, itemName, context, type, intentContext) => {
 
             if(intentContext && (intentContext === "FindThings" || intentContext === "FindingObjectContext")) {
                 if (rows[0] !== undefined) {
+                    
                     var loc = rows[0].location;
+                    connection.end();
                     respondBack(loc, true, {}, context);
                 } else {
+                    connection.end();
                     respondBack("Sorry I don't have it in my memory. Do you want me to remember the location of "+itemName+" ?", false, {
                         "itemName": itemName,
                         "context": "SaveThingsContext"
@@ -220,12 +240,14 @@ putDBResponse = (query, itemName, context, type, intentContext) => {
             } else if(intentContext && intentContext === "OthersMemory") {
                 if (rows[0] !== undefined) {
                     var mem = rows[0].memory;
+                    connection.end();
                     respondBack(mem, true, {}, context);
                 } else {
+                    connection.end();
                     respondBack("Sorry I don't have any memories right now.", false, {}, context);
                 }
-
             } else {
+                connection.end();
                 respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
             }
         });
@@ -253,7 +275,7 @@ function getDBResponse(query, callback) {
     connection.query(query, function (err, rows) {
         if (err) throw err;
         if (rows[0] !== undefined) {
-            callback(null, rows[0]);
+            callback(null, rows);
         } else {
             callback(null, null);
         }
