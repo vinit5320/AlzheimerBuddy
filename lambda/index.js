@@ -1,5 +1,6 @@
-var https = require('https')
-var mysql = require('mysql')
+var https = require('https');
+var mysql = require('mysql');
+require('datejs');
 
 var connection;
 
@@ -37,30 +38,24 @@ newSessionHelper = (event,context) => {
 
         case "IntentRequest":
             // Intent Request
-
             switch(event.request.intent.name) {
 
                 case "FindThings":
                     var itemName = event.request.intent.slots.thingsslot.value;
                     var query = "SELECT location from things where name = '" + itemName + "'";
                     getDBResponse(query, function(err, response) {
-                        if(response !== null){
+                        if(response !== null && response !== undefined){
+                            console.log("DATA AYA", response);
                             response = response[0];
-                            if (response !== undefined) {
-                                var loc = response.location;
-                                respondBack("It is usually located "+loc, true, {}, context);
-                                connection.end();
-                            } else {
-                                respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
-                                    "itemName": itemName,
-                                    "context": "SaveThingsContext"
-                                }, context);
-                                connection.end();
-                            }
-                        } else {
-                            errorResponse(context);
-                            connection.end();
-                        }
+                            var loc = response.location;
+                            respondBack("It is usually located "+loc, true, {}, context);
+                        } else if(itemName !== undefined){
+                            respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
+                                "itemName": itemName,
+                                "context": "SaveThingsContext"
+                            }, context);
+                        } else errorResponse(context);
+                        connection.end();
                     });
                     break;
 
@@ -79,13 +74,12 @@ newSessionHelper = (event,context) => {
                     break;
 
                 case "OthersMemory":
-                    var userName = "vinit";
+                    var userName = "me";
                     if(event.request.intent.slots.personName.hasOwnProperty('value')){
                         userName = ""+event.request.intent.slots.personName.value;
                     }
-                    userName = (userName === "me") ? "vinit" : userName;
-                    var query = (userName === "random") ? "SELECT memory FROM memories ORDER BY RAND() LIMIT 1" :
-                        "SELECT memory from memories where person = '" + userName + "' ORDER BY RAND() LIMIT 1";
+
+                    var query = "SELECT memory from memories where person = '" + userName + "' ORDER BY RAND() LIMIT 1";
                     getDBResponse(query, function(err, response) {
                         if (response !== null) {
                             response = response[0];
@@ -100,7 +94,7 @@ newSessionHelper = (event,context) => {
                             errorResponse(context);
                             connection.end();
                         }
-                    }
+                    });
                     break;
 
                 case "FamilySearch":
@@ -108,37 +102,29 @@ newSessionHelper = (event,context) => {
                         var personName = ""+event.request.intent.slots.personName.value;
                         var query = "SELECT * from family where name = '" + personName + "'";
                         getDBResponse(query, function(err, response) {
-                            if(response !== null)
-                            respondBack(response[0].name+' is your '+response[0].relationship+' who '+response[0].description, true, {}, context);
-                            else
-                            {
-                                respondBack("Sorry, no such person found.", true, {}, context);
-                            }
+                            if(response !== null) {
+                                response = response[0];
+                                respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description, true, {}, context);
+                            } else respondBack("Sorry, no such person found.", true, {}, context);
+                            connection.end();
                         });
-
                         break;
 
                     } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
                         var query = "SELECT * from family where relationship = '" + personRelation + "'";
-
-                        console.log(event.session.user.userId);
-
                         getDBResponse(query, function(err, response) {
-                            if(response !== null){
-                                if(response.length > 1)
-                                {
-                                    var res = "You have "+response.length+" "+personRelation+".";
-
-                                    for(i in response)
-                                    {
-                                       res += ' '+response[i].name+' is your '+response[i].relationship+' who '+response[i].description+' .';
+                            if(response !== null) {
+                                var responseText = "";
+                                if(response.length === 1){
+                                    responseText += response[0].name+' is your '+response[0].relationship+' who '+response[0].description;
+                                } else if(response.length > 1){
+                                    responseText = "You have "+response.length+" "+personRelation+". First, ";
+                                    for(var index in response) {
+                                        responseText += response[index].name+' is your '+response[index].relationship+' who '+response[index].description;
+                                        if(response[index++] !== indefined)
+                                            responseText += ". Then, "
                                     }
-
-                                    respondBack(res, true, {}, context);
-                                }
-                                else
-                                {skjhfjksdhkh
                                 }
                                 respondBack(responseText, true, {}, context);
                             } else respondBack("Sorry, I cannot find anyone with that relation.", true, {}, context);
@@ -173,18 +159,23 @@ newSessionHelper = (event,context) => {
                                     dataArray.push([response[row],curDate]);
                                 }
                             }
-                            else
-                            {
-                                respondBack("Sorry, no such relation found.", true, {}, context);
+                            //Sorting Data Array
+                            dataArray = sort_data_by_date(dateArray, dataArray);
+
+                            if(day === "next") {
+                                dataArray = dataArray[0][0];
+                                respondBack(dataArray.description+" on "+dataArray.dateTime+" at "+dataArray.location, true, {}, context);
+                            } else {
+                                get_Schedule(dataArray, day, today, context);
                             }
-                        });
-                    }
+
+                        } else errorResponse(context);
+                        connection.end();
+                    });
                     break;
 
                 default:
                     errorResponse(context);
-                    break;
-
             }
             break;
 
@@ -193,19 +184,18 @@ newSessionHelper = (event,context) => {
             break;
 
         default:
-            context.fail('INVALID REQUEST TYPE: '+event.request.type)
-
+            context.fail('INVALID REQUEST TYPE: '+event.request.type);
     }
 }
 
-oldSessionHelper = (event,context) => {
+oldSessionHelper = (event, context) => {
 
     var itemName,params,currentContext,query,prevContext;
 
     prevContext = event.session.attributes.context;
     currentContext = event.request.intent.name;
 
-    if(currentContext === "FindThings"){
+    if(currentContext === "FindingObjectContext" || currentContext === "FindThings"){
         itemName = event.request.intent.slots.thingsslot.value;
     } else if(currentContext === "SaveThingsLocation") {
         itemName = event.session.attributes.itemName;
@@ -217,7 +207,7 @@ oldSessionHelper = (event,context) => {
 
     switch(true) {
 
-        case currentContext === "FindThings":
+        case currentContext === "FindingObjectContext" || currentContext === "FindThings":
             query = "SELECT location FROM things WHERE name = '" + itemName + "'";
             getDBResponse(query, function(err, response) {
                 if(response !== null){
@@ -240,26 +230,54 @@ oldSessionHelper = (event,context) => {
             });
             break;
 
+        case currentContext === "FamilySearch" && prevContext === "FamilySearchContext":
+            if(event.request.intent.slots.personName.hasOwnProperty('value')){
+                var personName = ""+event.request.intent.slots.personName.value;
+                var query = "SELECT * from family where name = '" + personName + "'";
+
+                getDBResponse(query, function(err, response) {
+                    console.log("MY DATA", response);
+                    if(response !== null){
+                        response = response[0];
+                        respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
+                    } else respondBack("Sorry, no such person found.", true, {}, context);
+                    connection.end();
+                });
+                break;
+
+            } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
+                var personRelation = ""+event.request.intent.slots.personRelation.value;
+                var query = "SELECT location from things where name = '" + personRelation + "'";
+                getDBResponse(query, function(err, response) {
+                    if(response !== null) {
+                        response = response[0];
+                        respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description, true, {}, context);
+                    } else respondBack("Sorry, no such person found.", true, {}, context);
+                    connection.end();
+                });
+                break;
+            }
+            break;
+
         case currentContext === "SaveThingsLocation" && prevContext === "SaveThingsContext":
             params = params.replace(/my/g, 'your');
             params = params.replace(/mine/g, 'yours');
 
             if(event.request.intent.slots.yesNoBool.hasOwnProperty('value') &&
-                (event.request.intent.slots.yesNoBool.value === "no")) {}
-            else {
-
+                (event.request.intent.slots.yesNoBool.value === "no")) {
+                respondBack("Okay, I won't remember that.", true,{},context);
+            } else {
                 getDBResponse("SELECT * FROM things WHERE name = '"+itemName+"'", function(err, response) {
-                    if(response !== null){
-                        query = "UPDATE things SET location= '"+params+"' WHERE name = '"+itemName+"'";
-                        putDBResponse(query, itemName, context,"insert", currentContext);
-                    }
-                    else {
-                        query = "INSERT INTO things (name, location) VALUES ( '"+itemName+"', '"+params+"')";
-                        putDBResponse(query, itemName, context,"insert", currentContext);
-                    }
+                    query = (response !== null) ? "UPDATE things SET location= '"+params+"' WHERE name = '"+itemName+"'" :
+                    "INSERT INTO things (name, location) VALUES ( '"+itemName+"', '"+params+"')";
+
+                    getDBResponse(query, function() {
+                        respondBack("Okay I will remember "+itemName+"'s location.", true, {}, context);
+                    });
+                    connection.end();
                 });
             }
-             break;
+            break;
 
         case currentContext === "DecisionBool" && prevContext === "SaveThingsContext":
             if(params === "yes") {
@@ -279,7 +297,7 @@ oldSessionHelper = (event,context) => {
     }
 }
 
-//Reponse
+//Reponse Cards
 respondBack = (response, endSession, attributes, context) => {
     context.succeed(
         generateResponse(
@@ -290,87 +308,23 @@ respondBack = (response, endSession, attributes, context) => {
 }
 
 errorResponse = (context) => {
-    respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
+    respondBack("I don't know what you meant by that. Can you please try again?", true, {}, context);
 }
 
 //DB Connection
-putDBResponse = (query, itemName, context, type, intentContext) => {
-
-    if(type === "insert") {
-        connection.query(query, function(err, rows) {
-            if (err) throw err;
-            if(intentContext && intentContext === "SaveThingsLocation") {
-                connection.end();
-                respondBack("Okay I will remember that location.", true, {}, context);
-            } else {
-                connection.end();
-                respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
-            }
-        });
-
-    } else if(type === "select") {
-        connection.query(query, function (err, rows) {
-            if (err) throw err;
-
-            if(intentContext && (intentContext === "FindThings" || intentContext === "FindingObjectContext")) {
-                if (rows[0] !== undefined) {
-
-                    var loc = rows[0].location;
-                    connection.end();
-                    respondBack(loc, true, {}, context);
-                } else {
-                    connection.end();
-                    respondBack("Sorry I don't have it in my memory. Do you want me to remember the location of "+itemName+" ?", false, {
-                        "itemName": itemName,
-                        "context": "SaveThingsContext"
-                    }, context);
-                }
-
-            } else if(intentContext && intentContext === "OthersMemory") {
-                if (rows[0] !== undefined) {
-                    var mem = rows[0].memory;
-                    connection.end();
-                    respondBack(mem, true, {}, context);
-                } else {
-                    connection.end();
-                    respondBack("Sorry I don't have any memories right now.", false, {}, context);
-                }
-            } else {
-                connection.end();
-                respondBack("I don't know what you meant by that Can you please try again?", true, {}, context);
-            }
-        });
-    }
-}
-
-// getDBResponse = (query) => {
-//
-//     connection.query(query, function (err, rows) {
-//         if (err) throw err;
-//             if (rows[0] !== undefined) {
-//                 console.log("DATA AYAAA");
-//                 console.log(rows);
-//                 return rows[0];
-//             } else {
-//                 return '';
-//             }
-//     });
-//
-// }
-
-
-function getDBResponse(query, callback) {
+getDBResponse = (query, callback) => {
 
     connection.query(query, function (err, rows) {
         if (err) throw err;
         if (rows[0] !== undefined) {
-            callback(null, rows);
+            if(callback)
+                callback(null, rows);
         } else {
-            callback(null, null);
+            if(callback)
+                callback(null, null);
         }
     });
 }
-
 
 
 // Speechlet Helpers
