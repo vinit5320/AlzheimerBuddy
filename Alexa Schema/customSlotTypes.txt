@@ -50,20 +50,7 @@ remind
 something
 
 
-
-NAME
-
-Steve
-John
-Alex
-Vinit
-Peter
-Susan
-Emma
-Cristine
-random
-me
-
+// Name slot is not needed
 
 
 RELATIONSHIP
