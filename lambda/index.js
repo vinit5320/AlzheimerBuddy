@@ -43,7 +43,25 @@ newSessionHelper = (event,context) => {
                 case "FindThings":
                     var itemName = event.request.intent.slots.thingsslot.value;
                     var query = "SELECT location from things where name = '" + itemName + "'";
-                    putDBResponse(query, itemName, context, "select", ""+event.request.intent.name);
+                    getDBResponse(query, function(err, response) {
+                        if(response !== null){
+                            response = response[0];
+                            if (response !== undefined) {
+                                var loc = response.location;
+                                respondBack("It is usually located "+loc, true, {}, context);
+                                connection.end();
+                            } else {
+                                respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
+                                    "itemName": itemName,
+                                    "context": "SaveThingsContext"
+                                }, context);
+                                connection.end();
+                            }
+                        } else {
+                            errorResponse(context);
+                            connection.end();
+                        }
+                    });
                     break;
 
                 case "FindingObjectContext":
@@ -67,15 +85,28 @@ newSessionHelper = (event,context) => {
                     }
                     userName = (userName === "me") ? "vinit" : userName;
                     var query = (userName === "random") ? "SELECT memory FROM memories ORDER BY RAND() LIMIT 1" :
-                        "SELECT memory from memories where person = '" + userName + "'";
-                    putDBResponse(query, userName, context, "select", ""+event.request.intent.name);
+                        "SELECT memory from memories where person = '" + userName + "' ORDER BY RAND() LIMIT 1";
+                    getDBResponse(query, function(err, response) {
+                        if (response !== null) {
+                            response = response[0];
+                            if (response !== undefined) {
+                                var mem = response.memory;
+                                respondBack(mem, true, {}, context);
+                            } else {
+                                respondBack("Sorry I don't have any memories right now.", false, {}, context);
+                            }
+                            connection.end();
+                        } else {
+                            errorResponse(context);
+                            connection.end();
+                        }
+                    }
                     break;
 
                 case "FamilySearch":
                     if(event.request.intent.slots.personName.hasOwnProperty('value')){
                         var personName = ""+event.request.intent.slots.personName.value;
                         var query = "SELECT * from family where name = '" + personName + "'";
-                        
                         getDBResponse(query, function(err, response) {
                             if(response !== null)
                             respondBack(response[0].name+' is your '+response[0].relationship+' who '+response[0].description, true, {}, context);
@@ -84,34 +115,65 @@ newSessionHelper = (event,context) => {
                                 respondBack("Sorry, no such person found.", true, {}, context);
                             }
                         });
-                        
+
                         break;
 
                     } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
                         var query = "SELECT * from family where relationship = '" + personRelation + "'";
-                        
+
                         console.log(event.session.user.userId);
-                        
+
                         getDBResponse(query, function(err, response) {
                             if(response !== null){
                                 if(response.length > 1)
                                 {
                                     var res = "You have "+response.length+" "+personRelation+".";
-                                
+
                                     for(i in response)
                                     {
-                                       res += ' '+response[i].name+' is your '+response[i].relationship+' who '+response[i].description+' .';        
+                                       res += ' '+response[i].name+' is your '+response[i].relationship+' who '+response[i].description+' .';
                                     }
-                                    
+
                                     respondBack(res, true, {}, context);
                                 }
                                 else
-                                {
-                                    respondBack(" "+response[0].name+" is your "+response[0].relationship+" who "+response[0].description+" .", true, {}, context);
+                                {skjhfjksdhkh
+                                }
+                                respondBack(responseText, true, {}, context);
+                            } else respondBack("Sorry, I cannot find anyone with that relation.", true, {}, context);
+                            connection.end();
+                        });
+
+                    } else errorResponse(context);
+                    break;
+
+                case "FamilySearchContext":
+                    respondBack("Can you please provide this person's name?", false, {
+                        "itemName": "",
+                        "context": "FamilySearchContext"
+                    }, context);
+                    break;
+
+                case "Schedule":
+                    var day = ""+event.request.intent.slots.dateTime.value;
+
+                    var today = new Date();
+                    today = new Date(today.getTime() - (today.getTimezoneOffset() * 60000) + (3600000*(-5.0)));
+
+                    getDBResponse("SELECT * FROM reminder", function(err, response) {
+                        if(response !== null) {
+                            var dateArray=[], dataArray=[];
+                            for(var row in response){
+                                var curDate = Date.parse(response[row].dateTime);
+                                if(curDate.getDate() < today.getDate()) {
+                                    getDBResponse("DELETE FROM reminder where dateTime='"+response[row].dateTime+"'");
+                                } else {
+                                    dateArray.push(curDate);
+                                    dataArray.push([response[row],curDate]);
                                 }
                             }
-                            else 
+                            else
                             {
                                 respondBack("Sorry, no such relation found.", true, {}, context);
                             }
@@ -157,7 +219,25 @@ oldSessionHelper = (event,context) => {
 
         case currentContext === "FindThings":
             query = "SELECT location FROM things WHERE name = '" + itemName + "'";
-            putDBResponse(query, itemName, context, "select",currentContext);
+            getDBResponse(query, function(err, response) {
+                if(response !== null){
+                    response = response[0];
+                    if (response !== undefined) {
+                        var loc = response.location;
+                        respondBack("It is usually located "+loc, true, {}, context);
+                        connection.end();
+                    } else {
+                        respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
+                            "itemName": itemName,
+                            "context": "SaveThingsContext"
+                        }, context);
+                        connection.end();
+                    }
+                } else {
+                    errorResponse(context);
+                    connection.end();
+                }
+            });
             break;
 
         case currentContext === "SaveThingsLocation" && prevContext === "SaveThingsContext":
@@ -228,14 +308,13 @@ putDBResponse = (query, itemName, context, type, intentContext) => {
             }
         });
 
-
     } else if(type === "select") {
         connection.query(query, function (err, rows) {
             if (err) throw err;
 
             if(intentContext && (intentContext === "FindThings" || intentContext === "FindingObjectContext")) {
                 if (rows[0] !== undefined) {
-                    
+
                     var loc = rows[0].location;
                     connection.end();
                     respondBack(loc, true, {}, context);
@@ -313,6 +392,67 @@ generateResponse = (speechletResponse, sessionAttributes) => {
         version: "1.0",
         sessionAttributes: sessionAttributes,
         response: speechletResponse
+    }
+
+}
+
+//Schedule Helpers
+date_sort_asc = (date1, date2) => {
+    if (date1 < date2) return -1;
+    if (date1 > date2) return 1;
+    return 0;
+}
+
+sort_data_by_date = (dateArray, dataArray) => {
+
+    dateArray.sort(date_sort_asc);
+    var result = [];
+    dateArray.forEach(function(key) {
+        var found = false;
+        dataArray = dataArray.filter(function(item) {
+            if(!found && item[1] === key) {
+                result.push(item);
+                found = true;
+                return false;
+            } else
+                return true;
+        });
+    });
+    return result;
+}
+
+get_Schedule = (dataArray, day, today, context) => {
+
+    var result=[], searchDate = Date.parse(""+day), boolCheck=true;
+
+    if(searchDate === null || searchDate === undefined || searchDate === "null") {
+        errorResponse(context);
+        return false;
+    }
+    dataArray = dataArray.filter(function(item) {
+        var currDate = Date.parse(item[0].dateTime + "");
+        if ((day === "today" &&
+            currDate.getDate() === today.getDate() && currDate.getTime() >= today.getTime())
+            ||  (currDate.getDate() >= today.getDate() && currDate.getDate() <= searchDate.getDate() &&
+            currDate.getTime() >= today.getTime())) {
+            result.push(item[0]);
+            return false;
+        } else return true;
+    });
+
+    if(result.length > 0) {
+        var responseText= "";
+        result.forEach(function (item) {
+            if(boolCheck) {
+                boolCheck = false;
+                responseText += "" + item.description + " on "+ item.dateTime;
+            } else {
+                responseText += ". Followed by, "+item.description + " on "+ item.dateTime;
+            }
+        });
+        respondBack(responseText, true, {}, context);
+    } else {
+        respondBack("You don't have anything scheduled for "+day, true, {}, context);
     }
 
 }
