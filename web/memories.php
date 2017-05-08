@@ -40,20 +40,20 @@ ini_set('default_socket_timeout', 300);
   require "dashboard.php";
 
   $user_name = $_SESSION['userSession'];
-  
+
   
   if(isset($_POST['btn_add']))                                 
   {
-    $obname = $_POST['object_name'];
-    $obloc = $_POST['object_location'];
+    $name = $_POST['name'];
+    $memory = $_POST['memory'];
 
-    if($obname == "" || $obloc == "")
+    if($name == "" || $memory == "" )
     {
-      echo "<script type='text/javascript'>alert('Please enter both values in the field.');</script>";
+      echo "<script type='text/javascript'>alert('Please enter all values in the field.');</script>";
     }
     else
     {
-      $query2 = "insert into things values ('$user_name', '$obname', '$obloc')";
+      $query2 = "insert into memories values ('$user_name', '$name', '$memory')";
       $result = $conn->query($query2);
     }
   }
@@ -62,13 +62,13 @@ ini_set('default_socket_timeout', 300);
 </head>
 
 <body>
-  <?php echo '<center><p class="lead" style="padding-top: 15px;">Things</p></center><hr width="80%">';?>
+  <?php echo '<center><p class="lead" style="padding-top: 15px;">Memories</p></center><hr width="80%">';?>
   <br>
 
   <div>
     <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 33%; padding-bottom: 4%;">
-      <input type="text" class="form-control" placeholder="Thing Name" name="object_name">
-      <input type="text" class="form-control" placeholder="Location" name="object_location">
+      <input type="text" class="form-control" placeholder="Person Name" name="name">
+      <input type="text" class="form-control" placeholder="Memory" name="memory">
       <button type="submit" class="btn btn-primary" name="btn_add">Add</button>
     </form>
   </div>
@@ -78,22 +78,21 @@ ini_set('default_socket_timeout', 300);
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Thing Name</th>
-                    <th>Thing Location</th>
+                    <th>Name</th>
+                    <th>Memory</th>
                   </tr>
                 </thead>
                 <tbody>';
 
-                $query3 = "select * from things where uname = '$user_name'";
+                $query3 = "select * from memories where uname = '$user_name'";
                 $result = $conn->query($query3);
                 $index = 0;
-
                 while($row_ob = mysqli_fetch_array($result))
                 {
                   $index++;
                   echo '<tr>
-                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" name="obname" id="obname_'.$index.'" /></td>
-                    <td><input type="text" class="form-control" value="'.$row_ob[2].'" name="obloc" id="obloc_'.$index.'" /></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" id="name_'.$index.'" /></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[2].'" id="memory_'.$index.'" /></td>
                     <td><a href="javascript:click_edit('.$index.');">Update</a></td>
                     <td><a href="javascript:click_delete('.$index.');">Delete</a></td>
                   </tr>';
@@ -108,18 +107,18 @@ ini_set('default_socket_timeout', 300);
 
 function click_edit(index)
 {
-    var obname = document.getElementById("obname_"+index).value;
-    var obloc = document.getElementById("obloc_"+index).value;
-    var table = "things";
+    var name = document.getElementById("name_"+index).value;
+    var memory = document.getElementById("memory_"+index).value;
+    var table = "memories";
     var func = "update";
     var uname = "<?php echo $user_name; ?>";
 
     $.ajax({ url: 'update.php',
-        data: {obname: obname, obloc: obloc, table: table, uname: uname, func: func},
+        data: {name: name, memory: memory, table: table, uname: uname, func: func},
         type: 'post',
         success: function(out) {
               //alert(out);
-              window.location = "objects.php";
+              window.location = "memories.php";
 
           }
   });
@@ -128,17 +127,17 @@ function click_edit(index)
 
 function click_delete(index)
 {
-    var obname = document.getElementById("obname_"+index).value;
+    var name = document.getElementById("name_"+index).value;
     var uname = "<?php echo $user_name; ?>";
-    var table = "things";
+    var table = "memories";
     var func = "delete";
 
     $.ajax({ url: 'update.php',
-        data: {obname: obname, table: table, uname: uname, func: func},
+        data: {name: name, table: table, uname: uname, func: func},
         type: 'post',
         success: function(out) {
               //alert(out);
-              window.location = "objects.php";
+              window.location = "memories.php";
 
           }
   });
