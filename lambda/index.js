@@ -45,7 +45,7 @@ newSessionHelper = (event,context) => {
                     var query = "SELECT location from things where name = '" + itemName + "'";
                     getDBResponse(query, function(err, response) {
                         if(response !== null && response !== undefined){
-                            console.log("DATA AYA", response);
+                            // console.log("DATA AYA", response);
                             response = response[0];
                             var loc = response.location;
                             respondBack("It is usually located "+loc, true, {}, context);
@@ -119,11 +119,9 @@ newSessionHelper = (event,context) => {
                                 if(response.length === 1){
                                     responseText += response[0].name+' is your '+response[0].relationship+' who '+response[0].description;
                                 } else if(response.length > 1){
-                                    responseText = "You have "+response.length+" "+personRelation+". First, ";
-                                    for(var index in response) {
-                                        responseText += response[index].name+' is your '+response[index].relationship+' who '+response[index].description;
-                                        if(response[index++] !== indefined)
-                                            responseText += ". Then, "
+                                    responseText = "You have "+response.length+" "+personRelation+"s.";
+                                    for(index in response) {
+                                        responseText += ' '+response[index].name+' is your '+response[index].relationship+' who '+response[index].description;
                                     }
                                 }
                                 respondBack(responseText, true, {}, context);
