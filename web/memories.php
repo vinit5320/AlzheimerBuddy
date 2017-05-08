@@ -91,7 +91,7 @@ ini_set('default_socket_timeout', 300);
                 {
                   $index++;
                   echo '<tr>
-                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" id="name_'.$index.'" /></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" id="name_'.$index.'" disabled/></td>
                     <td><input type="text" class="form-control" value="'.$row_ob[2].'" id="memory_'.$index.'" /></td>
                     <td><a href="javascript:click_edit('.$index.');">Update</a></td>
                     <td><a href="javascript:click_delete('.$index.');">Delete</a></td>

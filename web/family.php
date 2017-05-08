@@ -40,11 +40,7 @@ ini_set('default_socket_timeout', 300);
   require "dashboard.php";
 
   $user_name = $_SESSION['userSession'];
-  
-  $query1 = "select id from users where uname = '$user_name'";
-  $result = $conn->query($query1);
-  $row = mysqli_fetch_assoc($result);
-  $user_id = $row['id'];
+
   
   if(isset($_POST['btn_add']))                                 
   {
@@ -58,7 +54,7 @@ ini_set('default_socket_timeout', 300);
     }
     else
     {
-      $query2 = "insert into family values ('$user_id', '$fname', '$frelation', '$fdesc')";
+      $query2 = "insert into family values ('$user_name', '$fname', '$frelation', '$fdesc')";
       $result = $conn->query($query2);
     }
   }
@@ -91,15 +87,19 @@ ini_set('default_socket_timeout', 300);
                 </thead>
                 <tbody>';
 
-                $query3 = "select * from family where uid = '$user_id'";
+                $query3 = "select * from family where uname = '$user_name'";
                 $result = $conn->query($query3);
+                $index = 0;
 
                 while($row_ob = mysqli_fetch_array($result))
                 {
+                  $index++;
                   echo '<tr>
-                    <td>'.$row_ob[1].'</td>
-                    <td>'.$row_ob[2].'</td>
-                    <td>'.$row_ob[3].'</td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" id="name_'.$index.'" disabled/></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[2].'" id="rel_'.$index.'" disabled/></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[3].'" id="desc_'.$index.'" /></td>
+                    <td><a href="javascript:click_edit('.$index.');">Update</a></td>
+                    <td><a href="javascript:click_delete('.$index.');">Delete</a></td>
                   </tr>';
                 }
 
@@ -107,5 +107,50 @@ ini_set('default_socket_timeout', 300);
               </table>
             </div>';
 ?>
+
+<script>
+
+function click_edit(index)
+{
+    var name = document.getElementById("name_"+index).value;
+    var rel = document.getElementById("rel_"+index).value;
+    var desc = document.getElementById("desc_"+index).value;
+    var table = "family";
+    var func = "update";
+    var uname = "<?php echo $user_name; ?>";
+
+    $.ajax({ url: 'update.php',
+        data: {name: name, rel: rel, desc: desc, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "family.php";
+
+          }
+  });
+
+}
+
+function click_delete(index)
+{
+    var name = document.getElementById("name_"+index).value;
+    var rel = document.getElementById("rel_"+index).value;
+    var uname = "<?php echo $user_name; ?>";
+    var table = "family";
+    var func = "delete";
+
+    $.ajax({ url: 'update.php',
+        data: {name: name, rel: rel, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "family.php";
+
+          }
+  });
+}
+
+</script>
+
 </body>
 </html>

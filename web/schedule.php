@@ -41,24 +41,19 @@ ini_set('default_socket_timeout', 300);
 
   $user_name = $_SESSION['userSession'];
   
-  $query1 = "select id from users where uname = '$user_name'";
-  $result = $conn->query($query1);
-  $row = mysqli_fetch_assoc($result);
-  $user_id = $row['id'];
-  
   if(isset($_POST['btn_add']))                                 
   {
-    $eventname = $_POST['event_name'];
-    $date = $_POST['date_input'];
-    $time = $_POST['time_input'];
+    $description = $_POST['description'];
+    $location = $_POST['location'];
+    $dateinput = $_POST['dateinput'];
 
-    if($eventname == "" || $date == "" || $time == "")
+    if($description == "" || $location == "" || $dateinput == "")
     {
       echo "<script type='text/javascript'>alert('Please enter all values in the field.');</script>";
     }
     else
     {
-      $query2 = "insert into schedule values ('$user_id', '$eventname', '$date', '$time')";
+      $query2 = "insert into reminder values ('$user_name', '$description', '$location', '$dateinput')";
       $result = $conn->query($query2);
     }
   }
@@ -71,10 +66,10 @@ ini_set('default_socket_timeout', 300);
   <br>
 
   <div>
-    <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 28%; padding-bottom: 4%;">
-      <input type="text" class="form-control" placeholder="Event" name="event_name">
-      <input type="date" class="form-control" placeholder="Date" name="date_input">
-      <input type="time" class="form-control" placeholder="Time" name="time_input">
+    <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 21%; padding-bottom: 4%;">
+      <input type="text" class="form-control" placeholder="For eg. 11th May 6:30 pm" name="dateinput" style="width:250px;">
+      <input type="text" class="form-control" placeholder="Location" name="location">
+      <input type="text" class="form-control" placeholder="Description" name="description">
       <button type="submit" class="btn btn-primary" name="btn_add">Add</button>
     </form>
   </div>
@@ -84,22 +79,26 @@ ini_set('default_socket_timeout', 300);
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Event Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
+                    <th>Date & Time</th>
+                    <th>Location</th>
+                    <th>Description</th>
                   </tr>
                 </thead>
                 <tbody>';
 
-                $query3 = "select * from schedule where user_id = '$user_id'";
+                $query3 = "select * from reminder where uname = '$user_name'";
                 $result = $conn->query($query3);
+                $index = 0;
 
                 while($row_ob = mysqli_fetch_array($result))
                 {
+                  $index++;
                   echo '<tr>
-                    <td>'.$row_ob[1].'</td>
-                    <td>'.$row_ob[2].'</td>
-                    <td>'.$row_ob[3].'</td>
+                   <td><input type="text" class="form-control"  value="'.$row_ob[3].'" id="dt_'.$index.'" disabled/></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[2].'" id="loc_'.$index.'" disabled/></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" id="desc_'.$index.'" /></td>
+                    <td><a href="javascript:click_edit('.$index.');">Update</a></td>
+                    <td><a href="javascript:click_delete('.$index.');">Delete</a></td>
                   </tr>';
                 }
 
@@ -107,6 +106,49 @@ ini_set('default_socket_timeout', 300);
               </table>
             </div>';
 ?>
+
+<script>
+
+function click_edit(index)
+{
+    var desc = document.getElementById("desc_"+index).value;
+    var loc = document.getElementById("loc_"+index).value;
+    var dt = document.getElementById("dt_"+index).value;
+    var table = "reminder";
+    var func = "update";
+    var uname = "<?php echo $user_name; ?>";
+
+    $.ajax({ url: 'update.php',
+        data: {dt: dt, desc: desc, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "schedule.php";
+
+          }
+  });
+
+}
+
+function click_delete(index)
+{
+    var dt = document.getElementById("dt_"+index).value;
+    var uname = "<?php echo $user_name; ?>";
+    var table = "reminder";
+    var func = "delete";
+
+    $.ajax({ url: 'update.php',
+        data: {dt: dt, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "schedule.php";
+
+          }
+  });
+}
+
+</script>
 
 </body>
 </html>
