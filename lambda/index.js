@@ -13,7 +13,7 @@ exports.handler = (event, context) => {
             user     : 'keval',
             ssl : 'Amazon RDS',
             password : 'mypassword',
-            database : 'ExampleDB',
+            database : 'alz_db',
             port : '3306',
         });
 
@@ -29,6 +29,8 @@ exports.handler = (event, context) => {
 }
 
 newSessionHelper = (event,context) => {
+    var userid = event.session.user.userId;
+    
     switch (event.request.type) {
 
         case "LaunchRequest":
@@ -42,21 +44,27 @@ newSessionHelper = (event,context) => {
 
                 case "FindThings":
                     var itemName = event.request.intent.slots.thingsslot.value;
-                    var query = "SELECT location from things where name = '" + itemName + "'";
+                    var query = "SELECT location from link natural join things where name = '" + itemName + "' and userId ='" + userid + "'";
+                    
                     getDBResponse(query, function(err, response) {
-                        if(response !== null && response !== undefined){
-                            // console.log("DATA AYA", response);
+                        if(response !== null && response !== undefined)
+                        {
                             response = response[0];
                             var loc = response.location;
                             respondBack("It is usually located "+loc, true, {}, context);
-                        } else if(itemName !== undefined){
+                        } 
+                        else if(itemName !== undefined)
+                        {
                             respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
                                 "itemName": itemName,
                                 "context": "SaveThingsContext"
                             }, context);
-                        } else errorResponse(context);
+                        } 
+                        else errorResponse(context);
+                        
                         connection.end();
                     });
+                    
                     break;
 
                 case "FindingObjectContext":
@@ -74,24 +82,28 @@ newSessionHelper = (event,context) => {
                     break;
 
                 case "OthersMemory":
-                    var userName = "me";
-                    if(event.request.intent.slots.personName.hasOwnProperty('value')){
-                        userName = ""+event.request.intent.slots.personName.value;
+                    
+                    if(event.request.intent.slots.personName.hasOwnProperty('value'))
+                    {
+                        person = ""+event.request.intent.slots.personName.value;
+                        var query = "SELECT memory from link natural join memories where userId = '" + userid + "' and person = '" + person + "'";
                     }
-
-                    var query = "SELECT memory from memories where person = '" + userName + "' ORDER BY RAND() LIMIT 1";
+                    else
+                    {
+                        var query = "SELECT memory from link natural join memories where userId = '" + userid + "' ORDER BY RAND() LIMIT 1";
+                    }
+                    
                     getDBResponse(query, function(err, response) {
-                        if (response !== null) {
+                        if (response !== null) 
+                        {
                             response = response[0];
-                            if (response !== undefined) {
-                                var mem = response.memory;
-                                respondBack(mem, true, {}, context);
-                            } else {
-                                respondBack("Sorry I don't have any memories right now.", false, {}, context);
-                            }
+                            respondBack(response.memory, true, {}, context);
+                            
                             connection.end();
-                        } else {
-                            errorResponse(context);
+                        } 
+                        else 
+                        {
+                            respondBack("Sorry, I don't have any memories right now.", false, {}, context);
                             connection.end();
                         }
                     });
@@ -113,6 +125,7 @@ newSessionHelper = (event,context) => {
                     } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
                         var query = "SELECT * from family where relationship = '" + personRelation + "'";
+                        console.log(userid);
                         getDBResponse(query, function(err, response) {
                             if(response !== null) {
                                 var responseText = "";
