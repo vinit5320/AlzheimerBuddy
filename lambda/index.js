@@ -110,35 +110,47 @@ newSessionHelper = (event,context) => {
                     break;
 
                 case "FamilySearch":
-                    if(event.request.intent.slots.personName.hasOwnProperty('value')){
+                    if(event.request.intent.slots.personName.hasOwnProperty('value'))
+                    {
                         var personName = ""+event.request.intent.slots.personName.value;
-                        var query = "SELECT * from family where name = '" + personName + "'";
+                        var query = "SELECT * from link natural join family where name = '" + personName + "' and userId = '" + userid + "'";
+                        
                         getDBResponse(query, function(err, response) {
-                            if(response !== null) {
+                            if(response !== null) 
+                            {
                                 response = response[0];
-                                respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description, true, {}, context);
-                            } else respondBack("Sorry, no such person found.", true, {}, context);
+                                respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description+'.', true, {}, context);
+                            } 
+                            else respondBack("Sorry, no such person found.", true, {}, context);
                             connection.end();
                         });
                         break;
 
-                    } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
+                    } 
+                    else if(event.request.intent.slots.personRelation.hasOwnProperty('value'))
+                    {
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
-                        var query = "SELECT * from family where relationship = '" + personRelation + "'";
-                        console.log(userid);
+                        var query = "SELECT * from link natural join family where relationship = '" + personRelation + "' and userId = '" + userid + "'";
+                        
                         getDBResponse(query, function(err, response) {
-                            if(response !== null) {
+                            if(response !== null) 
+                            {
                                 var responseText = "";
-                                if(response.length === 1){
-                                    responseText += response[0].name+' is your '+response[0].relationship+' who '+response[0].description;
-                                } else if(response.length > 1){
+                                if(response.length === 1)
+                                {
+                                    responseText += response[0].name+' is your '+response[0].relationship+' who '+response[0].description+'.';
+                                } 
+                                else if(response.length > 1)
+                                {
                                     responseText = "You have "+response.length+" "+personRelation+"s.";
-                                    for(index in response) {
-                                        responseText += ' '+response[index].name+' is your '+response[index].relationship+' who '+response[index].description;
+                                    for(index in response) 
+                                    {
+                                        responseText += ' '+response[index].name+' is your '+response[index].relationship+' who '+response[index].description+'.';
                                     }
                                 }
                                 respondBack(responseText, true, {}, context);
-                            } else respondBack("Sorry, I cannot find anyone with that relation.", true, {}, context);
+                            } 
+                            else respondBack("Sorry, I cannot find anyone with that relation.", true, {}, context);
                             connection.end();
                         });
 
