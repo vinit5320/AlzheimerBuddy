@@ -22,15 +22,15 @@ exports.handler = (event, context) => {
         } else {
             oldSessionHelper(event, context);
         }
-
+        
 
     } catch(error) { context.fail('Exception: '+error) }
 
 }
 
 newSessionHelper = (event,context) => {
-    var userid = event.session.user.userId;
     
+    var userid = event.session.user.userId;
     switch (event.request.type) {
 
         case "LaunchRequest":
@@ -170,14 +170,17 @@ newSessionHelper = (event,context) => {
                     var today = new Date();
                     today = new Date(today.getTime() - (today.getTimezoneOffset() * 60000) + (3600000*(-5.0)));
 
-                    getDBResponse("SELECT * FROM reminder", function(err, response) {
+                    getDBResponse("SELECT * FROM link natural join reminder where userId = '" + userid + "'", function(err, response) {
                         if(response !== null) {
                             var dateArray=[], dataArray=[];
                             for(var row in response){
                                 var curDate = Date.parse(response[row].dateTime);
-                                if(curDate.getDate() < today.getDate()) {
-                                    getDBResponse("DELETE FROM reminder where dateTime='"+response[row].dateTime+"'");
-                                } else {
+                                if(curDate.getDate() < today.getDate()) 
+                                {
+                                    getDBResponse("DELETE FROM reminder where dateTime='"+response[row].dateTime+"' and uname = (Select uname from link where userId = '" + userid + "')");
+                                } 
+                                else 
+                                {
                                     dateArray.push(curDate);
                                     dataArray.push([response[row],curDate]);
                                 }
@@ -213,17 +216,23 @@ newSessionHelper = (event,context) => {
 
 oldSessionHelper = (event, context) => {
 
+    var userid = event.session.user.userId;
     var itemName,params,currentContext,query,prevContext;
 
     prevContext = event.session.attributes.context;
     currentContext = event.request.intent.name;
 
-    if(currentContext === "FindingObjectContext" || currentContext === "FindThings"){
+    if(currentContext === "FindingObjectContext" || currentContext === "FindThings")
+    {
         itemName = event.request.intent.slots.thingsslot.value;
-    } else if(currentContext === "SaveThingsLocation") {
+    } 
+    else if(currentContext === "SaveThingsLocation") 
+    {
         itemName = event.session.attributes.itemName;
         params = event.request.intent.slots.thingsLocation.value;
-    } else if(currentContext === "DecisionBool") {
+    } 
+    else if(currentContext === "DecisionBool") 
+    {
         itemName = event.session.attributes.itemName;
         params = event.request.intent.slots.yesNoBool.value;
     }
@@ -231,25 +240,23 @@ oldSessionHelper = (event, context) => {
     switch(true) {
 
         case currentContext === "FindingObjectContext" || currentContext === "FindThings":
-            query = "SELECT location FROM things WHERE name = '" + itemName + "'";
+            query = "SELECT location from link natural join things where name = '" + itemName + "' and userId ='" + userid + "'";
+            
             getDBResponse(query, function(err, response) {
-                if(response !== null){
+                
+                if (response !== null && response !== undefined) {
                     response = response[0];
-                    if (response !== undefined) {
-                        var loc = response.location;
-                        respondBack("It is usually located "+loc, true, {}, context);
-                        connection.end();
-                    } else {
-                        respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
-                            "itemName": itemName,
-                            "context": "SaveThingsContext"
-                        }, context);
-                        connection.end();
-                    }
+                    var loc = response.location;
+                    respondBack("It is usually located "+loc, true, {}, context);
+                    connection.end();
                 } else {
-                    errorResponse(context);
+                    respondBack("Sorry I don't know where it is. Do you want me to save the "+itemName+"'s location for you?", false, {
+                        "itemName": itemName,
+                        "context": "SaveThingsContext"
+                    }, context);
                     connection.end();
                 }
+                
             });
             break;
 
