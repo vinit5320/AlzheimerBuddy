@@ -74,6 +74,15 @@
         }
       ],
       "intent": "FamilySearch"
+    },
+    {
+      "slots": [
+        {
+          "name": "dateTime",
+          "type": "DAY"
+        }
+      ],
+      "intent": "Schedule"
     }
   ]
 }

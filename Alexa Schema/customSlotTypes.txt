@@ -70,3 +70,17 @@ teacher
 co worker
 tutor
 colleague
+
+
+DAY
+
+next
+previous
+current
+tomorrow
+today
+next week
+this week
+this month
+this year
+next year
