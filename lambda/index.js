@@ -217,10 +217,18 @@ newSessionHelper = (event,context) => {
 oldSessionHelper = (event, context) => {
 
     var userid = event.session.user.userId;
-    var itemName,params,currentContext,query,prevContext;
+    var itemName,params,currentContext,query,prevContext, username;
 
     prevContext = event.session.attributes.context;
     currentContext = event.request.intent.name;
+    
+    getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+        if(response !== null && response !== undefined)
+        {
+            response = response[0];
+            username = response.uname;
+        }
+    });
 
     if(currentContext === "FindingObjectContext" || currentContext === "FindThings")
     {
@@ -260,58 +268,63 @@ oldSessionHelper = (event, context) => {
             });
             break;
 
-        case currentContext === "FamilySearch" && prevContext === "FamilySearchContext":
-            if(event.request.intent.slots.personName.hasOwnProperty('value')){
-                var personName = ""+event.request.intent.slots.personName.value;
-                var query = "SELECT * from family where name = '" + personName + "'";
+        // case currentContext === "FamilySearch" && prevContext === "FamilySearchContext":
+        //     if(event.request.intent.slots.personName.hasOwnProperty('value')){
+        //         var personName = ""+event.request.intent.slots.personName.value;
+        //         var query = "SELECT * from link natural join family where name = '" + personName + "' and userId = '" + userid + "'";
 
-                getDBResponse(query, function(err, response) {
-                    console.log("MY DATA", response);
-                    if(response !== null){
-                        response = response[0];
-                        respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
-                    } else respondBack("Sorry, no such person found.", true, {}, context);
-                    connection.end();
-                });
-                break;
+        //         getDBResponse(query, function(err, response) {
+        //             console.log("MY DATA", response);
+        //             if(response !== null){
+        //                 response = response[0];
+        //                 respondBack(response.name+' is your '+response.relationship+' who '+response.description, true, {}, context);
+        //             } else respondBack("Sorry, no such person found.", true, {}, context);
+        //             connection.end();
+        //         });
+        //         break;
 
-            } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
-                var personRelation = ""+event.request.intent.slots.personRelation.value;
-                var query = "SELECT location from things where name = '" + personRelation + "'";
-                getDBResponse(query, function(err, response) {
-                    if(response !== null) {
-                        response = response[0];
-                        respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description, true, {}, context);
-                    } else respondBack("Sorry, no such person found.", true, {}, context);
-                    connection.end();
-                });
-                break;
-            }
-            break;
+        //     } else if(event.request.intent.slots.personRelation.hasOwnProperty('value')){
+        //         var personRelation = ""+event.request.intent.slots.personRelation.value;
+        //         var query = "SELECT location from things where name = '" + personRelation + "'";
+        //         getDBResponse(query, function(err, response) {
+        //             if(response !== null) {
+        //                 response = response[0];
+        //                 respondBack(response.name + ' is your ' + response.relationship + ' who ' + response.description, true, {}, context);
+        //             } else respondBack("Sorry, no such person found.", true, {}, context);
+        //             connection.end();
+        //         });
+        //         break;
+        //     }
+        //     break;
 
         case currentContext === "SaveThingsLocation" && prevContext === "SaveThingsContext":
             params = params.replace(/my/g, 'your');
             params = params.replace(/mine/g, 'yours');
-
+            
             if(event.request.intent.slots.yesNoBool.hasOwnProperty('value') &&
                 (event.request.intent.slots.yesNoBool.value === "no")) {
-                respondBack("Okay, I won't remember that.", true,{},context);
+                respondBack("Okay, I won't remember that. What else can I help you with?", true,{},context);
             } else {
-                getDBResponse("SELECT * FROM things WHERE name = '"+itemName+"'", function(err, response) {
-                    query = (response !== null) ? "UPDATE things SET location= '"+params+"' WHERE name = '"+itemName+"'" :
-                    "INSERT INTO things (name, location) VALUES ( '"+itemName+"', '"+params+"')";
-
+                
+                getDBResponse("SELECT * FROM link natural join things WHERE name = '"+itemName+"' and userId = '" + userid + "'", function(err, response) {
+                    
+                    query = (response !== null) ? "UPDATE things SET location= '"+params+"' WHERE name = '"+itemName+"' and uname = (select uname from link where userId = '" + userid + "')" :
+                    "INSERT INTO things (uname, name, location) VALUES ('" + username +"' , '" + itemName + "', '" + params + "')";
+                    
                     getDBResponse(query, function() {
-                        respondBack("Okay I will remember "+itemName+"'s location.", true, {}, context);
+                        respondBack("Okay, I will remember "+itemName+"'s location.", true, {}, context);
                     });
+                
                     connection.end();
                 });
+                
             }
+            
             break;
 
         case currentContext === "DecisionBool" && prevContext === "SaveThingsContext":
             if(params === "yes") {
-                respondBack('Where exactly are you keeping your ' + itemName, false, {
+                respondBack('Okay. Where exactly are you keeping your ' + itemName, false, {
                     "itemName": itemName,
                     "context": "SaveThingsContext"
                 }, context);
