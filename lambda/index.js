@@ -41,7 +41,55 @@ newSessionHelper = (event,context) => {
         case "IntentRequest":
             // Intent Request
             switch(event.request.intent.name) {
-
+                
+                case "PersonalInformation":
+                    var infovariable = event.request.intent.slots.personalinfo.value;
+                    
+                    if(infovariable !== "age" && infovariable !== "birthdate")
+                    {
+                        var query = "select " + infovariable + " from link natural join personal where userId = '" + userid + "'";
+                    }
+                    else
+                    {
+                        var query = "select dob from link natural join personal where userId = '" + userid + "'";
+                    }
+                    
+                    getDBResponse(query, function(err, response){
+                       if(response !== null && response !== undefined)
+                       {
+                           if(infovariable === "name")
+                           {
+                               var res = response[0].name; 
+                                respondBack("Your name is " +res, true, {}, context);
+                           }
+                           else if(infovariable === "address")
+                           {
+                               var res = response[0].address;
+                                respondBack("Your home address is " +res, true, {}, context);
+                           }
+                           else if(infovariable === "age")
+                           {
+                               var today = new Date();
+                               var birthday = new Date(response[0].dob);
+                               var age = today.getFullYear() - birthday.getFullYear();
+                               var m = today.getMonth() - birthday.getMonth();
+                               
+                               if (m < 0 || (m === 0 && today.getDate() < birthday.getDate())) {
+                                age--;
+                              }
+                               
+                              var res = age; 
+                                respondBack("You are " + res + " years old.", true, {}, context);
+                           }
+                       }
+                       else
+                       {
+                           respondBack("Sorry, I dont have that information.", true, {}, context);
+                       }
+                       connection.end(); 
+                    });
+                    break;
+                    
                 case "FindThings":
                     var itemName = event.request.intent.slots.thingsslot.value;
                     var query = "SELECT location from link natural join things where name = '" + itemName + "' and userId ='" + userid + "'";
