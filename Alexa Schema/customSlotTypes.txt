@@ -1,5 +1,12 @@
 //CUSTOM SLOTS: Enter these custom slots below Intent Schema. For Eg. THINGS is Custom slot type and keys,pen,book,etc are the vales
 
+PERSONAL
+
+name
+age
+address
+birthdate
+
 THINGS
 
 keys

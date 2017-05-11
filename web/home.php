@@ -31,15 +31,86 @@ ini_set('default_socket_timeout', 300);
   session_start();
   require "dbconn.php";
   require "dashboard.php";
+ 
 
   $user_name = $_SESSION['userSession'];
 
   echo '<center><p class="lead" style="padding-top: 15px;">Hello '.$user_name.'</p></center><hr width="80%">'; 
-  
+
+  $sqlquery = "select date(logdate) as date,count(*) as count from recentlogs 
+         where uname = '$user_name' and date(now())-date(logdate)<7
+         group by date(logdate) order by logdate desc limit 5";
+         $i = 0;
+         $result=$conn->query($sqlquery);
+         while($row = mysqli_fetch_array($result)) {
+          $result_date[] = $row[0];
+          $result_count[] = $row[1];
+          $i++;  
+
+
+    }
+
+    //echo $result_date[0];
   ?>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+         // var uname = '<?php  $user_name; ?>'; 
+         // // alert(uname);
+         // $.ajax({ url: 'get_recentlogs.php',
+         //    data: {uname: uname},
+         //    type: 'post',
+         //    success: function(out) {                
+
+         //      alert(out.length);
+         //       for (var i in out)
+         //       {
+         //           alert(out[i]);
+         //       } 
+         //    }
+
+         //  });
+         // var date = '<?php echo $result_date[0]; ?>'; 
+         //  alert(date);
+        var data = google.visualization.arrayToDataTable([
+          
+          ['Date', 'No. of Requests'],
+          ['<?php echo $result_date[4]; ?>',  <?php echo $result_count[4]; ?>],
+          ['<?php echo $result_date[3]; ?>',  <?php echo $result_count[3]; ?>],
+          ['<?php echo $result_date[2]; ?>',  <?php echo $result_count[2]; ?>],
+          ['<?php echo $result_date[1]; ?>',  <?php echo $result_count[1]; ?>],
+          ['<?php echo $result_date[0]; ?>',  <?php echo $result_count[0]; ?>],
+          
+          
+          
+        ]);
+
+        var options = {
+          title: 'Recent Requests',
+          // curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+  
+  
 </head>
 
 <body>
+  <div id="curve_chart" style="width: 1300px; height: 400px;padding-left: 27%; padding-bottom: 4%;"></div>
+  <hr>
+  <div class = 'container'>
 
 </body>
 </html>
