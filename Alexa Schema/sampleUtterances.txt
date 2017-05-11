@@ -1,3 +1,4 @@
+PersonalInformation what is my {personalinfo} 
 FindingObjectContext can you find something
 FindingObjectContext can you help me find something
 FindingObjectContext help me in finding something
@@ -7,30 +8,6 @@ FindingObjectContext search
 FindingObjectContext help in searching
 FindingObjectContext find my
 FindingObjectContext find me
-FindingObjectContext can you find something
-FindingObjectContext can you help me find something
-FindingObjectContext help me in finding something
-FindingObjectContext help me find something
-FindingObjectContext search for my
-FindingObjectContext search
-FindingObjectContext help in searching
-FindingObjectContext find my
-FindingObjectContext find me
-FindingObjectContext where is my
-FindThings find my {thingsslot}
-FindThings search for my {thingsslot}
-FindThings where are my {thingsslot}
-FindThings did you see my {thingsslot}
-FindThings do you see my {thingsslot}
-FindThings where is my {thingsslot}
-FindThings where did i keep my {thingsslot}
-FindThings find my {thingsslot} and {thingsslot}
-FindThings where is the {thingsslot} kept
-FindThings help me in searching {thingsslot}
-FindThings help me in finding {thingsslot}
-FindThings my {thingsslot}
-FindThings my {thingsslot} please
-FindThings {thingsslot}
 FindThings find my {thingsslot}
 FindThings search for my {thingsslot}
 FindThings where are my {thingsslot}
@@ -58,57 +35,9 @@ SaveThingsContext replacing my {thingsslot}
 SaveThingsContext update the location of {thingsslot}
 SaveThingsContext change the location of {thingsslot}
 SaveThingsContext keeping my {thingsslot}
-SaveThingsContext I have kept my {thingsslot} here
-SaveThingsContext Save my {thingsslot} location
-SaveThingsContext remind me of my {thingsslot}
-SaveThingsContext I'm leaving my {thingsslot} here
-SaveThingsContext Im leaving my {thingsslot}
-SaveThingsContext left my {thingsslot}
-SaveThingsContext save the location of my {thingsslot}
-SaveThingsContext kept my {thingsslot}
-SaveThingsContext moving my {thingsslot}
-SaveThingsContext replacing my {thingsslot}
-SaveThingsContext update the location of {thingsslot}
-SaveThingsContext change the location of {thingsslot}
-SaveThingsContext keeping my {thingsslot}
-SaveThingsLocation {yesNoBool} {thingsLocation}
-SaveThingsLocation {thingsLocation}
 SaveThingsLocation {yesNoBool} {thingsLocation}
 SaveThingsLocation {thingsLocation}
 DecisionBool {yesNoBool}
-DecisionBool {yesNoBool}
-FamilySearch who is {personName}
-FamilySearch {personName}
-FamilySearch who is {personName} to me
-FamilySearch what is the relation of {personName}
-FamilySearch Do I know {personName}
-FamilySearch who is my {personRelation}
-FamilySearch what is my {personRelation} name
-FamilySearch what is the name of my {personRelation}
-FamilySearch who is {personName}
-FamilySearch {personName}
-FamilySearch who is {personName} to me
-FamilySearch what is the relation of {personName}
-FamilySearch Do I know {personName}
-FamilySearch who is my {personRelation}
-FamilySearch what is my {personRelation} name
-FamilySearch what is the name of my {personRelation}
-FamilySearchContext who is this
-FamilySearchContext help me know ths person
-FamilySearchContext who is this person
-FamilySearchContext do i know this person
-FamilySearchContext what is this guys name
-FamilySearchContext who is this girl
-FamilySearchContext who is he
-FamilySearchContext who is she
-FamilySearchContext who is this
-FamilySearchContext help me know ths person
-FamilySearchContext who is this person
-FamilySearchContext do i know this person
-FamilySearchContext what is this guys name
-FamilySearchContext who is this girl
-FamilySearchContext who is he
-FamilySearchContext who is she
 OthersMemory give me a {memoryText}
 OthersMemory tell me a {memoryText}
 OthersMemory a {memoryText} about me
@@ -121,18 +50,14 @@ OthersMemory {personName} {memoryText}
 OthersMemory to give me {personName} {memoryText}
 OthersMemory give me something on {personName}
 OthersMemory tell me somthing about {personName}
-OthersMemory give me a {memoryText}
-OthersMemory tell me a {memoryText}
-OthersMemory a {memoryText} about me
-OthersMemory {memoryText} on me
-OthersMemory tell me {memoryText}
-OthersMemory {memoryText}
-OthersMemory tell me a {memoryText} about {personName}
-OthersMemory {memoryText} on {personName}
-OthersMemory {personName} {memoryText}
-OthersMemory to give me {personName} {memoryText}
-OthersMemory give me something on {personName}
-OthersMemory tell me somthing about {personName}
+FamilySearch who is {personName}
+FamilySearch {personName}
+FamilySearch who is {personName} to me
+FamilySearch what is the relation of {personName}
+FamilySearch Do I know {personName}
+FamilySearch who is my {personRelation}
+FamilySearch what is my {personRelation} name
+FamilySearch what is the name of my {personRelation}
 Schedule what is {dateTime} in my schedule
 Schedule how is my schedule {dateTime}
 Schedule schedule for {dateTime}

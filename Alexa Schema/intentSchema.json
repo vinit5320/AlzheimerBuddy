@@ -3,6 +3,15 @@
     {
       "slots": [
         {
+          "name": "personalinfo",
+          "type": "PERSONAL"
+        }
+      ],
+      "intent": "PersonalInformation"
+    },
+    {
+      "slots": [
+        {
           "name": "thingsslot",
           "type": "THINGS"
         }
