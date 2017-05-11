@@ -31,11 +31,13 @@ exports.handler = (event, context) => {
 newSessionHelper = (event,context) => {
     
     var userid = event.session.user.userId;
+    var username;
+    
     switch (event.request.type) {
 
         case "LaunchRequest":
             // Launch Request
-            respondBack("You can ask for finding things, sharing memories, family information, etc.", true, {}, context);
+            respondBack("You can ask for finding things, sharing memories, family information, schedule, etc.", true, {}, context);
             break;
 
         case "IntentRequest":
@@ -44,6 +46,19 @@ newSessionHelper = (event,context) => {
                 
                 case "PersonalInformation":
                     var infovariable = event.request.intent.slots.personalinfo.value;
+                    
+                    getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+                        if(response !== null && response !== undefined)
+                        {
+                            response = response[0];
+                            username = response.uname;
+                        }
+                        
+                        getDBResponse("Insert into recentlogs values ('"+ username +"', 'Personal Information', '" + infovariable + "', now())", function(){
+                           
+                        });
+                        
+                    });
                     
                     if(infovariable !== "age" && infovariable !== "birthdate")
                     {
@@ -94,6 +109,18 @@ newSessionHelper = (event,context) => {
                     var itemName = event.request.intent.slots.thingsslot.value;
                     var query = "SELECT location from link natural join things where name = '" + itemName + "' and userId ='" + userid + "'";
                     
+                    getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+                        if(response !== null && response !== undefined)
+                        {
+                            response = response[0];
+                            username = response.uname;
+                        }
+                        
+                        getDBResponse("Insert into recentlogs values ('"+ username +"', 'Things', '" + itemName + "', now())", function(){
+                           
+                        });
+                    });
+                    
                     getDBResponse(query, function(err, response) {
                         if(response !== null && response !== undefined)
                         {
@@ -135,6 +162,19 @@ newSessionHelper = (event,context) => {
                     {
                         person = ""+event.request.intent.slots.personName.value;
                         var query = "SELECT memory from link natural join memories where userId = '" + userid + "' and person = '" + person + "'";
+                        
+                        getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+                        if(response !== null && response !== undefined)
+                        {
+                            response = response[0];
+                            username = response.uname;
+                        }
+                        
+                        getDBResponse("Insert into recentlogs values ('"+ username +"', 'Memory', '" + person + "', now())", function(){
+                           
+                        });
+                    });
+                        
                     }
                     else
                     {
@@ -163,6 +203,18 @@ newSessionHelper = (event,context) => {
                         var personName = ""+event.request.intent.slots.personName.value;
                         var query = "SELECT * from link natural join family where name = '" + personName + "' and userId = '" + userid + "'";
                         
+                        getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+                            if(response !== null && response !== undefined)
+                            {
+                                response = response[0];
+                                username = response.uname;
+                            }
+                            
+                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'People', '" + personName + "', now())", function(){
+                               
+                            });
+                        });
+                        
                         getDBResponse(query, function(err, response) {
                             if(response !== null) 
                             {
@@ -179,6 +231,18 @@ newSessionHelper = (event,context) => {
                     {
                         var personRelation = ""+event.request.intent.slots.personRelation.value;
                         var query = "SELECT * from link natural join family where relationship = '" + personRelation + "' and userId = '" + userid + "'";
+                        
+                        getDBResponse("select uname from link where userId = '" + userid + "'", function(err, response){
+                            if(response !== null && response !== undefined)
+                            {
+                                response = response[0];
+                                username = response.uname;
+                            }
+                            
+                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'Relation', '" + personRelation + "', now())", function(){
+                               
+                            });
+                        });
                         
                         getDBResponse(query, function(err, response) {
                             if(response !== null) 
@@ -361,8 +425,13 @@ oldSessionHelper = (event, context) => {
                     
                     getDBResponse(query, function() {
                         respondBack("Okay, I will remember "+itemName+"'s location.", true, {}, context);
+                    
+                         getDBResponse("Insert into recentlogs values ('"+ username +"', 'Things', '" + itemName + "', now())", function(){
+                        
+                        });
+                        
                     });
-                
+                    
                     connection.end();
                 });
                 
