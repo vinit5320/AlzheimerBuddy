@@ -39,7 +39,7 @@ ini_set('default_socket_timeout', 300);
 
   $sqlquery = "select date(logdate) as date,count(*) as count from recentlogs 
          where uname = '$user_name' and date(now())-date(logdate)<7
-         group by date(logdate) limit 5";
+         group by date(logdate) order by logdate desc limit 5";
          $i = 0;
          $result=$conn->query($sqlquery);
          while($row = mysqli_fetch_array($result)) {
@@ -81,16 +81,19 @@ ini_set('default_socket_timeout', 300);
         var data = google.visualization.arrayToDataTable([
           
           ['Date', 'No. of Requests'],
-          ['<?php echo $result_date[0]; ?>',  <?php echo $result_count[0]; ?>],
-          ['<?php echo $result_date[1]; ?>',  <?php echo $result_count[1]; ?>],
-          ['<?php echo $result_date[2]; ?>',  <?php echo $result_count[2]; ?>],
-          ['<?php echo $result_date[3]; ?>',  <?php echo $result_count[3]; ?>],
           ['<?php echo $result_date[4]; ?>',  <?php echo $result_count[4]; ?>],
+          ['<?php echo $result_date[3]; ?>',  <?php echo $result_count[3]; ?>],
+          ['<?php echo $result_date[2]; ?>',  <?php echo $result_count[2]; ?>],
+          ['<?php echo $result_date[1]; ?>',  <?php echo $result_count[1]; ?>],
+          ['<?php echo $result_date[0]; ?>',  <?php echo $result_count[0]; ?>],
+          
+          
+          
         ]);
 
         var options = {
           title: 'Recent Requests',
-          curveType: 'function',
+          // curveType: 'function',
           legend: { position: 'bottom' }
         };
 
