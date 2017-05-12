@@ -115,7 +115,7 @@ if(isset($_POST['btn_register']))
 			<hr class="colorgraph"><br>
 
 			<input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
-			<input type="text" class="form-control" name="password" placeholder="Password" />     		  
+			<input type="password" class="form-control" name="password" placeholder="Password" />     		  
 			<br>
 			<button class="btn btn-lg btn-primary btn-block"  name="btn_login" value="Login" type="Submit">Login</button>  			
 		</form>			

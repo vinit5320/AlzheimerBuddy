@@ -43,7 +43,8 @@ newSessionHelper = (event,context) => {
         case "IntentRequest":
             // Intent Request
             switch(event.request.intent.name) {
-                
+                    
+                    
                 case "PersonalInformation":
                     var infovariable = event.request.intent.slots.personalinfo.value;
                     
@@ -210,7 +211,7 @@ newSessionHelper = (event,context) => {
                                 username = response.uname;
                             }
                             
-                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'People', '" + personName + "', now())", function(){
+                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'Family', '" + personName + "', now())", function(){
                                
                             });
                         });
@@ -239,7 +240,7 @@ newSessionHelper = (event,context) => {
                                 username = response.uname;
                             }
                             
-                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'Relation', '" + personRelation + "', now())", function(){
+                            getDBResponse("Insert into recentlogs values ('"+ username +"', 'Family', '" + personRelation + "', now())", function(){
                                
                             });
                         });

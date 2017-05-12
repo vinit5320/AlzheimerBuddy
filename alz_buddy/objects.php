@@ -41,10 +41,6 @@ ini_set('default_socket_timeout', 300);
 
   $user_name = $_SESSION['userSession'];
   
-  $query1 = "select id from users where uname = '$user_name'";
-  $result = $conn->query($query1);
-  $row = mysqli_fetch_assoc($result);
-  $user_id = $row['id'];
   
   if(isset($_POST['btn_add']))                                 
   {
@@ -57,7 +53,7 @@ ini_set('default_socket_timeout', 300);
     }
     else
     {
-      $query2 = "insert into objects values ('$user_id', '$obname', '$obloc')";
+      $query2 = "insert into things values ('$user_name', '$obname', '$obloc')";
       $result = $conn->query($query2);
     }
   }
@@ -66,12 +62,12 @@ ini_set('default_socket_timeout', 300);
 </head>
 
 <body>
-  <?php echo '<center><p class="lead" style="padding-top: 15px;">Objects</p></center><hr width="80%">';?>
+  <?php echo '<center><p class="lead" style="padding-top: 15px;">Things</p></center><hr width="80%">';?>
   <br>
 
   <div>
     <form method="post" class="navbar-form navbar-left" role="search" style="padding-left: 33%; padding-bottom: 4%;">
-      <input type="text" class="form-control" placeholder="Object Name" name="object_name">
+      <input type="text" class="form-control" placeholder="Thing Name" name="object_name">
       <input type="text" class="form-control" placeholder="Location" name="object_location">
       <button type="submit" class="btn btn-primary" name="btn_add">Add</button>
     </form>
@@ -82,20 +78,24 @@ ini_set('default_socket_timeout', 300);
               <table class="table">
                 <thead>
                   <tr>
-                    <th>Object Name</th>
-                    <th>Object Location</th>
+                    <th>Thing Name</th>
+                    <th>Thing Location</th>
                   </tr>
                 </thead>
                 <tbody>';
 
-                $query3 = "select * from objects where userid = '$user_id'";
+                $query3 = "select * from things where uname = '$user_name'";
                 $result = $conn->query($query3);
+                $index = 0;
 
                 while($row_ob = mysqli_fetch_array($result))
                 {
+                  $index++;
                   echo '<tr>
-                    <td>'.$row_ob[1].'</td>
-                    <td>'.$row_ob[2].'</td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[1].'" name="obname" id="obname_'.$index.'" disabled/></td>
+                    <td><input type="text" class="form-control" value="'.$row_ob[2].'" name="obloc" id="obloc_'.$index.'" /></td>
+                    <td><a href="javascript:click_edit('.$index.');">Update</a></td>
+                    <td><a href="javascript:click_delete('.$index.');">Delete</a></td>
                   </tr>';
                 }
 
@@ -103,6 +103,48 @@ ini_set('default_socket_timeout', 300);
               </table>
             </div>';
 ?>
+
+<script>
+
+function click_edit(index)
+{
+    var obname = document.getElementById("obname_"+index).value;
+    var obloc = document.getElementById("obloc_"+index).value;
+    var table = "things";
+    var func = "update";
+    var uname = "<?php echo $user_name; ?>";
+
+    $.ajax({ url: 'update.php',
+        data: {obname: obname, obloc: obloc, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "objects.php";
+
+          }
+  });
+
+}
+
+function click_delete(index)
+{
+    var obname = document.getElementById("obname_"+index).value;
+    var uname = "<?php echo $user_name; ?>";
+    var table = "things";
+    var func = "delete";
+
+    $.ajax({ url: 'update.php',
+        data: {obname: obname, table: table, uname: uname, func: func},
+        type: 'post',
+        success: function(out) {
+              //alert(out);
+              window.location = "objects.php";
+
+          }
+  });
+}
+
+</script>
 
 </body>
 </html>
