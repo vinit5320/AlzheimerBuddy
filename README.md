@@ -1,5 +1,7 @@
 # AlzheimerBuddy
 
+<img src="http://www.vinitjasoliya.in/img/alz-alexa.png" width="40%">
+
 An interactive Alexa Skill targeted to help Alzheimer’s Patient in their daily activities, such as finding things, recollecting memories, setting events and many more.
 
 ### Developed using Amazon Web Services namely - 
